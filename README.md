@@ -1,4 +1,4 @@
-# grunt-dashboard
+# grunt-dashboard [![NPM version](https://badge.fury.io/js/grunt-dashboard.svg)](http://badge.fury.io/js/grunt-dashboard)
 
 > Generates a static dashboard based on data parsed within specified files
 
