@@ -2,6 +2,9 @@
 
 > Generates a static dashboard based on data parsed within specified files
 
+### NOTE: Still under heavy development - use at your own risk.
+
+
 ## Getting Started
 This plugin requires Grunt.
 
@@ -37,46 +40,58 @@ grunt.initConfig({
 
 ### Options
 
-#### options.separator
+#### options.symbol
 Type: `String`
-Default value: `',  '`
+Default value: `!`
 
-A string value that is used to do something with whatever.
-
-#### options.punctuation
-Type: `String`
-Default value: `'.'`
-
-A string value that is used to do something else with whatever else.
+A string value that is used to determine your data search pattern.
+The default Regular Expression pattern is `/!##([^;]*?)##!/g` - `Note the '!' comes from the options.symbol`
 
 ### Usage Examples
 
 #### Default Options
-In this example, the default options are used to do something with whatever. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result would be `Testing, 1 2 3.`
+In this example, the default options are used to parse JSON data from within an HTML file. So when the task below runs, it will create a `index.json` file that will contain the json data: `{"status":"dev"}`.
+
+`html/index.html`:
+```html
+<!-- !##
+{
+  "status": "dev"
+}
+##! -->
+```
 
 ```js
 grunt.initConfig({
   dashboard: {
     options: {},
     files: {
-      'dest/default_options': ['src/testing', 'src/123'],
+      'json/index.json': ['html/index.html'],
     },
   },
 })
 ```
 
 #### Custom Options
-In this example, custom options are used to do something else with whatever else. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result in this case would be `Testing: 1 2 3 !!!`
+In this example, you can see that the `options.symbol` property is used to change what pattern to look for. This new pattern i.e. `@## ##@` will be used to parse for JSON data from within an HTML file. So when the task below runs, it will create a `json` file that will contain the json data: `{"status":"dev"}`.
+
+`html/index.html`:
+```html
+<!-- @##
+{
+  "status": "dev"
+}
+##@ -->
+```
 
 ```js
 grunt.initConfig({
   dashboard: {
     options: {
-      separator: ': ',
-      punctuation: ' !!!',
+      symbol: '@'
     },
     files: {
-      'dest/default_options': ['src/testing', 'src/123'],
+      'json/index.json': ['html/index.html'],
     },
   },
 })
@@ -86,7 +101,7 @@ grunt.initConfig({
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
-_(Nothing yet)_
+v0.0.1 - Initial alpha release
 
 ## License
 Copyright (c) 2014 Jake Larson. Licensed under the MIT license.

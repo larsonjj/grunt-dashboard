@@ -17,12 +17,25 @@ module.exports = function (grunt) {
 
     // Merge task-specific and/or target-specific options with these defaults.
     var options = this.options({
-      punctuation: '.',
-      separator: ', '
+      symbol: '!'
     });
+
+    // Build Regex
+    var regExp = new RegExp(options.symbol + '##([^;]*?)##' + options.symbol, 'g');
+
+    // Strip out regex symbols
+    var stripSymbols = function(string) {
+        return string.replace(options.symbol + '##', '').replace('##' + options.symbol, '');
+    };
+
+    // Remove whitespace and newlines
+    var stripInvisibles = function(string) {
+      return string.replace(/\n/g, '').replace(/\s/g, '');
+    };
 
     // Iterate over all specified file groups.
     this.files.forEach(function (file) {
+
       // Concat specified files.
       var src = file.src.filter(function (filepath) {
         // Warn on and remove invalid source files (if nonull was set).
@@ -35,10 +48,28 @@ module.exports = function (grunt) {
       }).map(function (filepath) {
         // Read file source.
         return grunt.file.read(filepath);
-      }).join(grunt.util.normalizelf(options.separator));
+      });
 
       // Handle options.
-      src += options.punctuation;
+      // Take file source, convert to string and parse for regexp matches
+      // Only take the first match (because the data should be at the top of the file anyway) and strip away the search symbols (e.g. !## or ##!)
+      src = stripSymbols(src
+            .toString()
+            .match(regExp)[0]);
+
+      // Remove newlines and spaces (\n, \s)
+      src = stripInvisibles(src);
+
+      // Test to make sure data is JSON compatible
+      try {
+         JSON.parse(src);
+      }
+      catch (e) {
+         grunt.log.error('Data inside "' + file.src + '" is not in correct JSON format');
+         grunt.log.error('------- Details Below -------');
+         grunt.log.errorlns(e);
+
+      }
 
       // Write the destination file.
       grunt.file.write(file.dest, src);
