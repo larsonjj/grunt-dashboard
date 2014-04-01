@@ -61,6 +61,7 @@ In this example, the default options are used to parse JSON data from within an 
 ##! -->
 ```
 
+`Gruntfile.js`
 ```js
 grunt.initConfig({
   dashboard: {
@@ -84,6 +85,7 @@ In this example, you can see that the `options.symbol` property is used to chang
 ##@ -->
 ```
 
+`Gruntfile.js`
 ```js
 grunt.initConfig({
   dashboard: {
