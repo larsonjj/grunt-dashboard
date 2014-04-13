@@ -37,15 +37,15 @@ module.exports = function (grunt) {
         options: {
         },
         files: {
-          'tmp/default_options': ['test/fixtures/default_regex.html']
+          'tmp/dashboard_default.html': ['test/fixtures/default/*.html']
         }
       },
       custom_options: {
         options: {
-          symbol: '@'
+          searchTerm: 'custom'
         },
         files: {
-          'tmp/custom_options': ['test/fixtures/custom_regex.html']
+          'tmp/dashboard_custom.html': ['test/fixtures/custom/*.html']
         }
       }
     },
