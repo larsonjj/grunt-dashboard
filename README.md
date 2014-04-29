@@ -46,6 +46,24 @@ Default value: `dash`
 
 A string value that is used to determine your data search pattern.
 
+#### options.generatedDir
+Type: `String`
+Default value: `dashboard/generated`
+
+A string value that is used to determine where the dashboard html file with be generated.
+
+#### options.dashTemplate
+Type: `String`
+Default value: `dashboard/dashboard-template.hbs`
+
+A string value that is used to determine what handlebars template should be used for generating the dashboard.
+
+#### options.logo
+Type: `String`
+Default value: `data:image/png;base64`
+
+A string value that is used to determine what image should be used in a template as a logo.
+
 ### Usage Examples
 
 #### Default Options
@@ -108,6 +126,8 @@ grunt.initConfig({
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
+<strong>v0.0.3</strong> - Added `logo` option. Updated dashboard template styles and logic.
+
 <strong>v0.0.2</strong> - Major Changes: No longer requires jade, now only depends on HTML. Default dashboard template is not also written in HTML + Handlebars. Search pattern has changed to something more readable (ie `<!--[custom:data] [/custom] -->`). More options have been added/changed: `symbol` is now `searchTerm`, added 'generatedDir', and added 'dashTemplate'.
 
 <strong>v0.0.1</strong> - Initial alpha release

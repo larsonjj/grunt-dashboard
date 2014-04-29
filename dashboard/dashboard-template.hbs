@@ -70,7 +70,11 @@
                 margin-right: auto;
                 width: 800px;
             }
-            .item-list, .category-list {
+            .main-title {
+                padding: 10px;
+                text-align: center;
+            }
+            .item-list, .sidebar-list {
                 list-style-type: none;
             }
             .content {
@@ -82,31 +86,54 @@
                 float: left;
                 width: 30%;
                 padding: 2.5%;
+                border-right: 1px solid #ededed;
             }
             .sidebar-title {
-                font-size: 1em;
+                font-size: 12px;
                 padding-bottom: 5px;
-                border-bottom: #f7f7f7 1px solid;
+                text-transform: uppercase;
+                font-weight: normal;
+                border-bottom: #ededed 1px solid;
+                color: #333;
             }
-            .category-list li {
+            .sidebar-list li {
                 border: none;
+                position: relative;
                 background: #f7f7f7;
                 border-radius: 5px;
-                padding: 5px;
+                padding: 3px;
                 margin-bottom: 5px;
+                border: 1px solid #fff;
             }
-            .category-list li button {
+            .sidebar-list li:after {
+              content: '✓';
+              position: absolute;
+              display: none;
+              right: 10px;
+              top: 0px;
+              line-height: 32px;
+            }
+            .sidebar-list li.active:after {
+              display: block
+            }
+            .sidebar-list li:hover {
+              border: 1px solid #a8d9e3;
+            }
+            .sidebar-list li button {
                 border: none;
                 background: none;
                 width: 100%;
                 text-align: left;
                 font-size: 0.8em;
             }
+            .sidebar-list li button:focus {
+              outline: none;
+            }
             .item-list li {
                 border: none;
                 background: #f7f7f7;
                 border-radius: 5px;
-                padding: 5px;
+                padding: 7px;
                 margin-bottom: 5px;
             }
             .item-list li a {
@@ -116,6 +143,28 @@
                 text-align: left;
                 color: inherit;
                 font-size: 0.8em;
+                text-decoration: none;
+            }
+
+            .font-white {
+                color: #fff;
+            }
+            .font-black {
+                color: #333;
+            }
+
+            .section-wrapper {
+              position: relative;
+            }
+            .filter-clear {
+              position: absolute;
+              top: -6px;
+              right: 0;
+              background: #ededed;
+              border: none;
+              border-radius: 3px;
+              line-height: 14px;
+              display: none;
             }
 
             /* Status Styles */
@@ -152,20 +201,39 @@
     </head>
     <body class="dashboard-body">
         <header>
-            <div class="container">
-                <h1 class="main-title">Dashboard</h1>
+            <div class="container main-title">
+                <img alt="Logo" width="170" src="{{logo}}" />
             </div>
         </header>
         <div class="container cf">
             <div class="sidebar">
-                <h2 class="sidebar-title">Categories</h2>
-                <ul class="category-list">
-                {{#each categories}}
-                    <li class="{{class}}">
-                        <button type="button">{{name}}</button>
-                    </li>
-                {{/each}}
-                </ul>
+                <div class="section-wrapper">
+                    <h2 class="sidebar-title">Categories</h2>
+                    <ul class="sidebar-list category">
+                    {{#each categories}}
+                        {{#ifvalue class value='page'}}
+                        <li class="{{class}} active">
+                            <button type="button" class="font-black">{{name}}</button>
+                        </li>
+                        {{else}}
+                        <li class="{{class}}">
+                            <button type="button" class="font-black">{{name}}</button>
+                        </li>
+                        {{/ifvalue}}
+                    {{/each}}
+                    </ul>
+                </div>
+                <div class="section-wrapper">
+                    <h2 class="sidebar-title">Legend</h2>
+                    <button class="filter-clear" type="button">Clear</button>
+                    <ul class="sidebar-list legend">
+                    {{#each statuses}}
+                        <li class="{{class}}">
+                            <button type="button" class="font-white">{{name}}</button>
+                        </li>
+                    {{/each}}
+                    </ul>
+                </div>
             </div>
             <div class="content">
                 <ul class="item-list">
@@ -189,26 +257,86 @@
             (function() {
 
                 var itemList = document.querySelector('.item-list');
-                var categoryList = document.querySelector('.category-list');
+                var categoryList = document.querySelector('.category');
+                var legendList = document.querySelector('.legend');
 
                 var categoryItems = categoryList.getElementsByTagName('li');
                 var itemItems = itemList.getElementsByTagName('li');
+                var legendItems = legendList.getElementsByTagName('li');
+
+                var clearButtons = document.querySelectorAll('.filter-clear');
+
+                var changeActiveItem = function(items, theClass, context) {
+                  var regex = new RegExp(' active', 'g');
+                  for (var j = 0; j < items.length; j += 1) {
+                      items[j].className = items[j].className.replace(regex, '');
+                  }
+                  context.className += ' active';
+                };
+
+                var clearFilters = function(context) {
+                  context.style.display = 'none';
+                  var listItems = context.parentNode.getElementsByTagName('li');
+                  for (var i = 0; i < listItems.length; i += 1) {
+                    listItems[i].className = listItems[i].className.replace(/ active/, '').replace(/active /, '').replace(/active/, '')
+                  }
+                };
+
+                var showClearButton = function(context) {
+                  context.parentNode.parentNode.querySelector('.filter-clear').style.display = 'block';
+                };
+
+                var filterItems = function() {
+                  var activeSidebarItems = document.querySelector('.sidebar').querySelectorAll('.active');
+                  var filters = [];
+                  for (var i = 0; i < activeSidebarItems.length; i += 1) {
+                    filters.push(activeSidebarItems[i].className.split(' ')[0]);
+                  }
+                  for (var j = 0; j < itemItems.length; j += 1) {
+                    var classes = itemItems[j].className.split(' ');
+                    var show = true;
+                    for (i = 0; i < filters.length; i += 1) {
+                      if (classes.indexOf(filters[i]) > -1) {
+                      }
+                      else {
+                        show = false;
+                      }
+                    }
+                    if (show) {
+                      itemItems[j].className = itemItems[j].className.replace(/ hide/, '').replace(/hide /, '').replace(/hide/, '');
+                    }
+                    else if (itemItems[j].className.indexOf('hide') === -1) {
+                      itemItems[j].className = itemItems[j].className.concat(' hide');
+                    }
+                  }
+                };
 
                 var catItemsClick = function() {
-                    var filterName = this.className;
-                    for (var i = 0; i < itemItems.length; i += 1) {
-                        var classes = itemItems[i].className.split(' ');
-                        if (classes.indexOf(filterName) > -1) {
-                            itemItems[i].className = itemItems[i].className.replace(/ hide/, '').replace(/hide/, '');
-                        }
-                        else {
-                            itemItems[i].className = itemItems[i].className.concat(' hide');
-                        }
-                    }
+                    changeActiveItem(categoryItems, 'active', this);
+                    filterItems();
+                };
+
+                var legendItemsClick = function() {
+                    changeActiveItem(legendItems, 'active', this);
+                    showClearButton(this);
+                    filterItems();
+                };
+
+                var clearButtonsClick = function() {
+                    clearFilters(this);
+                    filterItems();
                 };
 
                 for (var i = 0; i < categoryItems.length; i += 1) {
                     categoryItems[i].addEventListener('click', catItemsClick);
+                }
+
+                for (i = 0; i < legendItems.length; i += 1) {
+                    legendItems[i].addEventListener('click', legendItemsClick);
+                }
+
+                for (i = 0; i < clearButtons.length; i += 1) {
+                    clearButtons[i].addEventListener('click', clearButtonsClick);
                 }
 
             })();
