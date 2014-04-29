@@ -126,6 +126,8 @@ grunt.initConfig({
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
+<strong>v0.0.4</strong> - Updated ending pattern search regex to be more leinient to better handle HTML rendered by preprocessors (ie Jade).
+
 <strong>v0.0.3</strong> - Added `logo` option. Updated dashboard template styles and logic.
 
 <strong>v0.0.2</strong> - Major Changes: No longer requires jade, now only depends on HTML. Default dashboard template is not also written in HTML + Handlebars. Search pattern has changed to something more readable (ie `<!--[custom:data] [/custom] -->`). More options have been added/changed: `symbol` is now `searchTerm`, added 'generatedDir', and added 'dashTemplate'.
