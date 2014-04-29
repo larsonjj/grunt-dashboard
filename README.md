@@ -126,6 +126,8 @@ grunt.initConfig({
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
+<strong>v0.0.5</strong> - Fixed dependencies to underscore and handlebars.
+
 <strong>v0.0.4</strong> - Updated ending pattern search regex to be more leinient to better handle HTML rendered by preprocessors (ie Jade).
 
 <strong>v0.0.3</strong> - Added `logo` option. Updated dashboard template styles and logic.
