@@ -32,7 +32,7 @@ module.exports = function (grunt) {
         // Build Regex
         var regbuild = new RegExp('<!--\\[' + options.searchTerm + ':(\\w+)(?:\\(([^\\)]+)\\))?\\s*([^\\s]+)\\s*');
         // end build pattern -- <!-- [/dash] -->
-        var regend = new RegExp('\\s*\\[\\s*\\/\\s*' + options.searchTerm + '\\s*\\]\\s*-->');
+        var regend = new RegExp('\\s*\\[\\s*\\/\\s*' + options.searchTerm + '\\s*\\]\\s*');
 
         // Strip out regex symbols
         var stripSymbols = function(string) {
