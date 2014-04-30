@@ -1,6 +1,6 @@
 {
   "name": "grunt-dashboard",
-  "version": "0.0.4",
+  "version": "0.0.6",
   "description": "Generates a static dashboard based on data parsed within specified files",
   "homepage": "https://github.com/larsonjj/grunt-dashboard",
   "repository": "https://github.com/larsonjj/grunt-dashboard",
