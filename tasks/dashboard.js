@@ -115,9 +115,9 @@ module.exports = function (grunt) {
                 // Take file source, convert to string and parse for regexp matches
                 parsedResult = parseLines(src.toString());
 
-                // if (!options.debug) {
-                //     removeDataComments(src.toString(), filepath);
-                // }
+                if (!options.debug) {
+                    removeDataComments(src.toString(), filepath);
+                }
 
                 return {
                     collection: parsedResult.map(function(item) {

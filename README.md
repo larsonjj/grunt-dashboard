@@ -133,6 +133,7 @@ grunt.initConfig({
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
+<strong>v0.0.7</strong> - HOTFIX: `debug` option was not working
 <strong>v0.0.6</strong> - Added ability to remove data comments using `debug` option (mostly for production build purposes).
 
 <strong>v0.0.5</strong> - Fixed dependencies to underscore and handlebars.
