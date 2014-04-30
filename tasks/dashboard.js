@@ -87,7 +87,7 @@ module.exports = function (grunt) {
 
         // Remove all data comments from HTML file
         var removeDataComments = function(str, filepath) {
-            var regAll = new RegExp('<!--\\s*\\[' + options.searchTerm + ':(\\w+)(?:\\(([^\\)]+)\\))?\\s*([^\\s]+)\\s*(.|\n)*-->');
+            var regAll = new RegExp('<!--\\s*\\[' + options.searchTerm + ':(\\w+)(?:\\(([^\\)]+)\\))?\\s*([^\\s]+)\\s*[\\s\\S]*?-->');
             var containsData = regAll.test(str);
             if (containsData) {
                 grunt.file.write(filepath, str.replace(regAll, ''));
