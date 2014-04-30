@@ -64,6 +64,13 @@ Default value: `data:image/png;base64`
 
 A string value that is used to determine what image should be used in a template as a logo.
 
+#### options.debug
+Type: `Boolean`
+Default value: `true`
+
+A boolean value that is used to determine if data comments in your HTML files should be removed.
+This would mostly be used for when you are doing a production build.
+
 ### Usage Examples
 
 #### Default Options
@@ -126,6 +133,8 @@ grunt.initConfig({
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
+<strong>v0.0.6</strong> - Added ability to remove data comments using `debug` option (mostly for production build purposes).
+
 <strong>v0.0.5</strong> - Fixed dependencies to underscore and handlebars.
 
 <strong>v0.0.4</strong> - Updated ending pattern search regex to be more leinient to better handle HTML rendered by preprocessors (ie Jade).
