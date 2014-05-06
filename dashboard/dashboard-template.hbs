@@ -202,7 +202,11 @@
     <body class="dashboard-body">
         <header>
             <div class="container main-title">
+                {{#if logo}}
                 <img alt="Logo" width="170" src="{{logo}}" />
+                {{else}}
+                <h3>Logo</h3>
+                {{/if}}
             </div>
         </header>
         <div class="container cf">

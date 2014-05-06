@@ -35,7 +35,8 @@ module.exports = function (grunt) {
     dashboard: {
       default_options: {
         options: {
-          dashTemplate: 'dashboard/dashboard-template.hbs'
+          dashTemplate: 'dashboard/dashboard-template.hbs',
+          htmlTemplate: 'dashboard/html-template.hbs'
         },
         files: {
           'tmp/dashboard_default.html': ['test/fixtures/default/*.html']
@@ -44,7 +45,8 @@ module.exports = function (grunt) {
       custom_options: {
         options: {
           searchTerm: 'custom',
-          dashTemplate: 'dashboard/dashboard-template.hbs'
+          dashTemplate: 'dashboard/dashboard-template.hbs',
+          htmlTemplate: 'dashboard/html-template.hbs'
         },
         files: {
           'tmp/dashboard_custom.html': ['test/fixtures/custom/*.html']
