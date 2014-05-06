@@ -157,6 +157,8 @@ grunt.initConfig({
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
+<strong>v0.1.0</strong> - Added support for EJS and Jade data comments (`[dash:ejs]` or `[dash:jade]`). Also added `assests` option to allow for including mixins and html partials from other files to your Jade or EJS data comments
+
 <strong>v0.0.9</strong> - Added `htmlTemplate` option to allow for `[dash:html]` comments to create HTML partials within the 'generatedDir' option.
 
 <strong>v0.0.8</strong> - HOTFIX: fixed `debug` option regex search pattern
