@@ -46,7 +46,11 @@ module.exports = function (grunt) {
         options: {
           searchTerm: 'custom',
           dashTemplate: 'dashboard/dashboard-template.hbs',
-          htmlTemplate: 'dashboard/html-template.hbs'
+          htmlTemplate: 'dashboard/html-template.hbs',
+          assets: [
+            'dashboard/jade/*.jade',
+            'dashboard/ejs/*.ejs'
+          ]
         },
         files: {
           'tmp/dashboard_custom.html': ['test/fixtures/custom/*.html']

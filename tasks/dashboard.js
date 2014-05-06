@@ -9,6 +9,8 @@
 'use strict';
 
 var handlebars = require('handlebars');
+var jade = require('jade');
+var ejs = require('ejs');
 var path = require('path');
 var _ = require('underscore');
 
@@ -26,7 +28,8 @@ module.exports = function (grunt) {
             searchTerm: 'dash',
             dashTemplate: 'node_modules/grunt-dashboard/dashboard/dashboard-template.hbs',
             htmlTemplate: 'node_modules/grunt-dashboard/dashboard/html-template.hbs',
-            logo: ''
+            logo: '',
+            assets: []
         });
 
         var handlebarsOptions = {};
@@ -95,6 +98,43 @@ module.exports = function (grunt) {
             }
         };
 
+        var compileToFile = function(item, type) {
+            _.each(_.where(item.collection, {type: type}), function(data) {
+
+                var files = [];
+                var includes;
+
+                var templateFile = grunt.file.read(options.htmlTemplate);
+
+                // Render out HTML from tempate
+                var template = handlebars.compile(templateFile);
+
+                if (type === 'jade') {
+                    // load in needed assets for .jade files
+                    files = _.filter(grunt.file.expand(options.assets), function(item) {
+                        return item.indexOf('.jade') > -1;
+                    });
+                    includes = 'include ' + files.join('\ninclude ') + '\n';
+                    console.log(includes);
+                    data.source = jade.render(includes + data.source, {pretty:true, filename:true});
+                }
+                else if (type === 'ejs') {
+                    // load in needed assets for .ejs files
+                    files = _.filter(grunt.file.expand(options.assets), function(item) {
+                        return item.indexOf('.ejs') > -1;
+                    });
+                    includes = '<% include ' + files.join(' %>\n<% include ') + ' %>\n';
+                    console.log(includes);
+                    data.source = ejs.render(includes + data.source, {filename:true});
+                }
+
+                var html = template(data);
+
+                grunt.file.write('./' + options.generatedDir + '/' + data.name + '.html', html);
+                grunt.log.writeln('HTML file created at:  "' + options.generatedDir + '/' + data.name + '.html"');
+            });
+        };
+
         // Iterate over all specified file groups (ie: output destination(s)).
         this.files.forEach(function (file) {
             // Concat specified files.
@@ -161,10 +201,10 @@ module.exports = function (grunt) {
                                 type: 'data'
                             };
                         }
-                        else if (item.type === 'html') {
+                        else if (item.type) {
                             return {
                                 source: item.source,
-                                type: 'html',
+                                type: item.type,
                                 name: path.basename(filepath, '.html')
                             };
                         }
@@ -185,7 +225,6 @@ module.exports = function (grunt) {
             }
             else {
                 var jsonData;
-                var htmlData;
                 var jsonArray = [];
 
                 output.forEach(function(item) {
@@ -194,18 +233,13 @@ module.exports = function (grunt) {
                     jsonData = _.pluck(_.where(item.collection, {type: 'data'}), 'source');
 
                     // Grab all HTML data within files and write it to file
-                    htmlData = _.each(_.where(item.collection, {type: 'html'}), function(data) {
+                    compileToFile(item, 'html');
 
-                        var templateFile = grunt.file.read(options.htmlTemplate);
+                    // Grab all Jade data within files and write it to file
+                    compileToFile(item, 'jade');
 
-                        // Render out HTML from tempate
-                        var template = handlebars.compile(templateFile);
-
-                        var html = template(data);
-
-                        grunt.file.write('./' + options.generatedDir + '/' + data.name + '.html', html);
-                        grunt.log.writeln('HTML file created at:  "' + options.generatedDir + '/' + data.name + '.html"');
-                    });
+                    // Grab all EJS data within files and write it to file
+                    compileToFile(item, 'ejs');
 
                     if (jsonData.length > 1) {
                         jsonData = jsonData.join(',');
