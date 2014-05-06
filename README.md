@@ -54,13 +54,19 @@ A string value that is used to determine where the dashboard html file with be g
 
 #### options.dashTemplate
 Type: `String`
-Default value: `dashboard/dashboard-template.hbs`
+Default value: 'node_modules/grunt-dashboard/dashboard/dashboard-template.hbs`
 
 A string value that is used to determine what handlebars template should be used for generating the dashboard.
 
+#### options.htmlTemplate
+Type: `String`
+Default value: 'node_modules/grunt-dashboard/dashboard/html-template.hbs`
+
+A string value that is used to determine what handlebars template should be used for generating components and other HTML partials.
+
 #### options.logo
 Type: `String`
-Default value: `data:image/png;base64`
+Default value: `empty`
 
 A string value that is used to determine what image should be used in a template as a logo.
 
@@ -101,7 +107,7 @@ grunt.initConfig({
 ```
 
 #### Custom Options
-In this example, you can see that the `options.searchTerm` property is used to change what pattern to look for. This new pattern i.e. `[custom:data]` will be used to parse for JSON data from within an HTML file. So when the task below runs, it will create a `index.html` file within the `dashboard` directory built from all the scanned HTML files within the `html` directory.
+In this example, you can see that the `options.searchTerm` property is used to change what pattern to look for. This new pattern i.e. `[custom:data]` will be used to parse for JSON data from within an HTML file. So when the task below runs, it will create a `index.html` file within the `dashboard` directory built from all the scanned HTML files within the `html` directory. Notice the second set of `[custom]` comments: This will also build out an HTML partial file using the markup within the `[custom:html]` comments using the handlebars template specified with `options.htmlTemplate`.
 
 `html/index.html`:
 ```html
@@ -113,6 +119,14 @@ In this example, you can see that the `options.searchTerm` property is used to c
     "link": "path/to/file/index.html"
 }
 [/custom] -->
+<!--[custom:html]
+<div>
+    <h1>Testing</h1>
+    <p>
+        This is just a simple test
+    <p>
+</div>
+[/custom] -->
 ```
 
 `Gruntfile.js`
@@ -120,10 +134,13 @@ In this example, you can see that the `options.searchTerm` property is used to c
 grunt.initConfig({
   dashboard: {
     options: {
-      searchTerm: 'custom'
+      searchTerm: 'custom',
+      dashTemplate: 'dashboard/dashboard-template.hbs',
+      htmlTemplate: 'dashboard/html-template.hbs',
+      generatedDir: 'dashboard/generated'
     },
     files: {
-      'dashboard/index.html': ['html/*.html'],
+      'dashboard/index.html': ['html/*.html']
     },
   },
 })
@@ -133,6 +150,8 @@ grunt.initConfig({
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
+<strong>v0.0.9</strong> - Added `htmlTemplate` option to allow for `[dash:html]` comments to create HTML partials within the 'generatedDir' option.
+
 <strong>v0.0.8</strong> - HOTFIX: fixed `debug` option regex search pattern
 
 <strong>v0.0.7</strong> - HOTFIX: `debug` option was not working
