@@ -44,7 +44,7 @@ module.exports = function (grunt) {
             return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
         };
 
-        var parseLines = function(str) {
+        var parseLines = function(str, fileExt) {
              var lines = str.replace(/\r\n/g, '\n').split(/\n/);
              var lineArray = [];
              var contentArray = [];
@@ -52,10 +52,24 @@ module.exports = function (grunt) {
              var type;
 
              lines.some(function (line) {
-                // Build Regex
-                var regbuild = new RegExp('<!--\\s*\\[' + options.searchTerm + ':(\\w+)(?:\\(([^\\)]+)\\))?\\s*([^\\s]+)\\s*');
-                // end build pattern -- [/dash] -->
-                var regend = new RegExp('\\s*\\[\\s*\\/\\s*' + options.searchTerm + '\\s*\\]\\s*');
+                var regbuild;
+                var regend;
+                if (fileExt === '.html' || fileExt === '.ejs') {
+                    // start build pattern -- [dash:html] or [dash:ejs]
+                    regbuild = new RegExp('<!--\\s*\\[' + options.searchTerm + ':(\\w+)(?:\\(([^\\)]+)\\))?\\s*([^\\s]+)\\s*');
+                    // end build pattern -- [/dash] -->
+                    regend = new RegExp('\\s*\\[\\s*\\/\\s*' + options.searchTerm + '\\s*\\]\\s*');
+                }
+                else if (fileExt === '.jade') {
+                    // start build pattern -- //[dash:jade]
+                    regbuild = new RegExp('\/\/-\\s*\\[' + options.searchTerm + ':(\\w+)(?:\\(([^\\)]+)\\))?\\s*([^\\s]+)\\s*');
+                    // end build pattern -- [/dash]
+                    regend = new RegExp('\\s*\\[\\s*\\/\\s*' + options.searchTerm + '\\s*\\]\\s*');
+                }
+                else {
+                    grunt.log.error('File type not supported: %s', fileExt);
+                }
+
                 var indent = (line.match(/^\s*/) || [])[0];
                 var build = line.match(regbuild);
                 var startbuild = regbuild.test(line);
@@ -71,6 +85,9 @@ module.exports = function (grunt) {
                 }
 
                 if (record) {
+                    if (fileExt === '.jade') {
+                        line = line.replace(/^(\s+|\t+)/, '');
+                    }
                     lineArray.push(line);
                 }
 
@@ -102,20 +119,20 @@ module.exports = function (grunt) {
             _.each(_.where(item.collection, {type: type}), function(data) {
 
                 var files = [];
-                var includes;
+                var includes = '';
 
                 var templateFile = grunt.file.read(options.htmlTemplate);
 
                 // Render out HTML from tempate
                 var template = handlebars.compile(templateFile);
-
                 if (type === 'jade') {
                     // load in needed assets for .jade files
                     files = _.filter(grunt.file.expand(options.assets), function(item) {
                         return item.indexOf('.jade') > -1;
                     });
-                    includes = 'include ' + files.join('\ninclude ') + '\n';
-                    console.log(includes);
+                    if (files.length > 0) {
+                        includes = 'include ' + files.join('\ninclude ') + '\n\n';
+                    }
                     data.source = jade.render(includes + data.source, {pretty:true, filename:true});
                 }
                 else if (type === 'ejs') {
@@ -123,8 +140,9 @@ module.exports = function (grunt) {
                     files = _.filter(grunt.file.expand(options.assets), function(item) {
                         return item.indexOf('.ejs') > -1;
                     });
-                    includes = '<% include ' + files.join(' %>\n<% include ') + ' %>\n';
-                    console.log(includes);
+                    if (files.length > 0) {
+                        includes = '<% include ' + files.join(' %>\n<% include ') + ' %>\n';
+                    }
                     data.source = ejs.render(includes + data.source, {filename:true});
                 }
 
@@ -133,6 +151,11 @@ module.exports = function (grunt) {
                 grunt.file.write('./' + options.generatedDir + '/' + data.name + '.html', html);
                 grunt.log.writeln('HTML file created at:  "' + options.generatedDir + '/' + data.name + '.html"');
             });
+        };
+
+        var getExtension = function(filename) {
+            var i = filename.lastIndexOf('.');
+            return (i < 0) ? '' : filename.substr(i);
         };
 
         // Iterate over all specified file groups (ie: output destination(s)).
@@ -149,12 +172,13 @@ module.exports = function (grunt) {
             }).map(function (filepath) {
                 // Read file source.
                 var src = grunt.file.read(filepath);
+                var fileExt = getExtension(filepath);
                 var jsonData;
                 var parsedResult;
 
                 // Handle options.
                 // Take file source, convert to string and parse for regexp matches
-                parsedResult = parseLines(src.toString());
+                parsedResult = parseLines(src.toString(), fileExt);
 
                 if (!options.debug) {
                     removeDataComments(src.toString(), filepath);
