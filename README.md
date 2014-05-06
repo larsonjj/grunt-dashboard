@@ -77,6 +77,13 @@ Default value: `true`
 A boolean value that is used to determine if data comments in your HTML files should be removed.
 This would mostly be used for when you are doing a production build.
 
+#### options.assets
+Type: `Array`
+Default value: `[]`
+
+An array of files that will act as includes for any supported markup preprocessor (Jade, EJS, etc).
+This would mostly be used for including files with mixins within them.
+
 ### Usage Examples
 
 #### Default Options
