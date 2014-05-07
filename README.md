@@ -54,13 +54,13 @@ A string value that is used to determine where the dashboard html file with be g
 
 #### options.dashTemplate
 Type: `String`
-Default value: 'node_modules/grunt-dashboard/dashboard/dashboard-template.hbs`
+Default value: `node_modules/grunt-dashboard/dashboard/dashboard-template.hbs`
 
 A string value that is used to determine what handlebars template should be used for generating the dashboard.
 
 #### options.htmlTemplate
 Type: `String`
-Default value: 'node_modules/grunt-dashboard/dashboard/html-template.hbs`
+Default value: `node_modules/grunt-dashboard/dashboard/html-template.hbs`
 
 A string value that is used to determine what handlebars template should be used for generating components and other HTML partials.
 
