@@ -229,7 +229,7 @@ module.exports = function (grunt) {
                             return {
                                 source: item.source,
                                 type: item.type,
-                                name: path.basename(filepath, '.html')
+                                name: path.basename(filepath, '.' + item.type)
                             };
                         }
                         else {

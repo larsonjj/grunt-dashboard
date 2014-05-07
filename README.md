@@ -157,6 +157,8 @@ grunt.initConfig({
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
+<strong>v0.1.2</strong> - Updated logic for generated filenames, they now all get the .html extention without their preprocessor added (ex: index.jade.html - > index.html). This should make things less confusing.
+
 <strong>v0.1.1</strong> - Updated logic to better handle the rendering of EJS and Jade Templates. Now jade and ejs templates can be directly passed in the `files` property of the grunt task
 
 <strong>v0.1.0</strong> - Added support for EJS and Jade data comments (`[dash:ejs]` or `[dash:jade]`). Also added `assests` option to allow for including mixins and html partials from other files to your Jade or EJS data comments
