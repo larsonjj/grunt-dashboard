@@ -84,6 +84,7 @@
             }
             .sidebar {
                 float: left;
+                position: relative;
                 width: 30%;
                 padding: 2.5%;
                 border-right: 1px solid #ededed;
@@ -95,6 +96,9 @@
                 font-weight: normal;
                 border-bottom: #ededed 1px solid;
                 color: #333;
+            }
+            .sidebar-list {
+                width: 100%;
             }
             .sidebar-list li {
                 border: none;
@@ -166,6 +170,25 @@
               line-height: 14px;
               display: none;
             }
+            .menu-icon {
+                display: none;
+                position: absolute;
+                top: 10px;
+                right: -50px;
+                width: 50px;
+                height: 50px;
+                background: #acacac;
+            }
+            .menu-bar-list {
+                margin-top: 9px;
+                margin-left: -1px;
+                list-style-type: none;
+            }
+            .menu-bar-list li {
+                border-bottom: 4px solid #fff;
+                height: 9px;
+                margin: 0 13px;
+            }
 
             /* Status Styles */
             li.development {
@@ -176,7 +199,55 @@
                 background: #eb9494;
                 color: #fff;
             }
+            li.blocked {
+                background: #e74c3c;
+                color: #fff;
+            }
+            li.queued {
+                background: #c9c9c9;
+                color: #fff;
+            }
+            li.review {
+                background: #8fbc23;
+                color: #fff;
+            }
+            li.live {
+                background: #2a4a67;
+                color: #fff;
+            }
             /* End Status Styles */
+            /* Media Queries */
+            @media all and (max-width: 768px) {
+                .sidebar {
+                    position: absolute;
+                    width: 200px;
+                    top: 0;
+                    left: -200px;
+                    bottom: 0;
+                    background: #acacac;
+                    border: none;
+                }
+                .sidebar.open {
+                    left: 0;
+                }
+                .menu-icon {
+                    display: block;
+                }
+                .container {
+                    width: 100%;
+                }
+                .content {
+                    width: 100%;
+                }
+                .sidebar-title {
+                    border-bottom: #fff 1px solid;
+                    color: #fff;
+                }
+                .sidebar-list li {
+                    border: 1px solid #acacac;
+                }
+            }
+            /* End Media Queries */
         </style><!--[if IE 8]>
         <script>
             // Protect window.console method calls, e.g. console is not defined on IE
@@ -211,6 +282,13 @@
         </header>
         <div class="container cf">
             <div class="sidebar">
+                <div class="menu-icon">
+                    <ul class="menu-bar-list">
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                    </ul>
+                </div>
                 <div class="section-wrapper">
                     <h2 class="sidebar-title">Categories</h2>
                     <ul class="sidebar-list category">
@@ -260,6 +338,7 @@
             'use strict';
             (function() {
 
+
                 var itemList = document.querySelector('.item-list');
                 var categoryList = document.querySelector('.category');
                 var legendList = document.querySelector('.legend');
@@ -269,6 +348,10 @@
                 var legendItems = legendList.getElementsByTagName('li');
 
                 var clearButtons = document.querySelectorAll('.filter-clear');
+
+                var sidebar = document.querySelector('.sidebar');
+                var menuButton = document.querySelector('.menu-icon');
+                var isOpen = false;
 
                 var changeActiveItem = function(items, theClass, context) {
                   var regex = new RegExp(' active', 'g');
@@ -331,6 +414,17 @@
                     filterItems();
                 };
 
+                var menuButtonClick = function() {
+                    if (!isOpen) {
+                        isOpen = true;
+                        sidebar.className += ' open';
+                    }
+                    else {
+                        isOpen = false;
+                        sidebar.className = sidebar.className.replace(' open', '').replace('open', '');
+                    }
+                };
+
                 for (var i = 0; i < categoryItems.length; i += 1) {
                     categoryItems[i].addEventListener('click', catItemsClick);
                 }
@@ -342,6 +436,8 @@
                 for (i = 0; i < clearButtons.length; i += 1) {
                     clearButtons[i].addEventListener('click', clearButtonsClick);
                 }
+
+                menuButton.addEventListener('click', menuButtonClick);
 
             })();
         </script>
