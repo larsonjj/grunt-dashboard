@@ -2,9 +2,6 @@
 
 > Generates a static dashboard based on data parsed within specified files
 
-### NOTE: Still under heavy development - use at your own risk.
-
-
 ## Getting Started
 This plugin requires Grunt.
 
