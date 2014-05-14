@@ -160,7 +160,6 @@ module.exports = function (grunt) {
                             includes += '{% import \'' + item  + '\' as ' + path.basename(item, '.swig') + ' %}\n';
                         });
                     }
-                    console.log(includes + data.source);
                     data.source = swig.render(includes + data.source, {filename:true});
                 }
 
