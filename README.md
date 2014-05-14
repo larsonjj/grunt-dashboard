@@ -154,6 +154,8 @@ grunt.initConfig({
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
+<strong>v0.1.4</strong> - Added support for `.swig` files
+
 <strong>v0.1.3</strong> - Made the default dashboard template responsive with a mobile menu for filters.
 
 <strong>v0.1.2</strong> - Updated logic for generated filenames, they now all get the .html extention without their preprocessor added (ex: index.jade.html - > index.html). This should make things less confusing.

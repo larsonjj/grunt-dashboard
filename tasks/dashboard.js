@@ -53,18 +53,22 @@ module.exports = function (grunt) {
 
              lines.some(function (line) {
                 var regbuild;
-                var regend;
-                if (fileExt === '.html' || fileExt === '.ejs') {
-                    // start build pattern -- [dash:html] or [dash:ejs]
+                var regend = new RegExp('\\s*\\[\\s*\\/\\s*' + options.searchTerm + '\\s*\\]\\s*');
+                if (fileExt === '.html') {
+                    // start build pattern -- <!-- [dash:html]
                     regbuild = new RegExp('<!--\\s*\\[' + options.searchTerm + ':(\\w+)(?:\\(([^\\)]+)\\))?\\s*([^\\s]+)\\s*');
-                    // end build pattern -- [/dash] -->
-                    regend = new RegExp('\\s*\\[\\s*\\/\\s*' + options.searchTerm + '\\s*\\]\\s*');
                 }
                 else if (fileExt === '.jade') {
                     // start build pattern -- //[dash:jade]
                     regbuild = new RegExp('\/\/-\\s*\\[' + options.searchTerm + ':(\\w+)(?:\\(([^\\)]+)\\))?\\s*([^\\s]+)\\s*');
-                    // end build pattern -- [/dash]
-                    regend = new RegExp('\\s*\\[\\s*\\/\\s*' + options.searchTerm + '\\s*\\]\\s*');
+                }
+                else if (fileExt === '.ejs') {
+                    // start build pattern -- <%# [dash:ejs]
+                    regbuild = new RegExp('<%#-\\s*\\[' + options.searchTerm + ':(\\w+)(?:\\(([^\\)]+)\\))?\\s*([^\\s]+)\\s*');
+                }
+                else if (fileExt === '.swig') {
+                    // start build pattern -- {# [dash:swig]
+                    regbuild = new RegExp('{#\\s*\\[' + options.searchTerm + ':(\\w+)(?:\\(([^\\)]+)\\))?\\s*([^\\s]+)\\s*');
                 }
                 else {
                     grunt.log.error('File type not supported: %s', fileExt);
