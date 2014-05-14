@@ -11,6 +11,7 @@
 var handlebars = require('handlebars');
 var jade = require('jade');
 var ejs = require('ejs');
+var swig = require('swig');
 var path = require('path');
 var _ = require('underscore');
 
@@ -149,6 +150,19 @@ module.exports = function (grunt) {
                     }
                     data.source = ejs.render(includes + data.source, {filename:true});
                 }
+                else if (type === 'swig') {
+                    // load in needed assets for .ejs files
+                    files = _.filter(grunt.file.expand(options.assets), function(item) {
+                        return item.indexOf('.swig') > -1;
+                    });
+                    if (files.length > 0) {
+                        files.forEach(function(item) {
+                            includes += '{% import \'' + item  + '\' as ' + path.basename(item, '.swig') + ' %}\n';
+                        });
+                    }
+                    console.log(includes + data.source);
+                    data.source = swig.render(includes + data.source, {filename:true});
+                }
 
                 var html = template(data);
 
@@ -268,6 +282,9 @@ module.exports = function (grunt) {
 
                     // Grab all EJS data within files and write it to file
                     compileToFile(item, 'ejs');
+
+                    // Grab all swig data within files and write it to file
+                    compileToFile(item, 'swig');
 
                     if (jsonData.length > 1) {
                         jsonData = jsonData.join(',');

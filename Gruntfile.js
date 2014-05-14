@@ -49,7 +49,8 @@ module.exports = function (grunt) {
           htmlTemplate: 'dashboard/html-template.hbs',
           assets: [
             'dashboard/jade/*.jade',
-            'dashboard/ejs/*.ejs'
+            'dashboard/ejs/*.ejs',
+            'dashboard/swig/*.swig'
           ]
         },
         files: {
