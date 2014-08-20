@@ -1,0 +1,15 @@
+//- [dash:data]
+    {
+        "status": "development",
+        "category": "module",
+        "label": "my-component",
+        "link": "../test/fixtures/custom/my-component.html"
+    }
+    [/dash]
+//- [dash:jade]
+    +myComponent()
+    [/dash]
+
+mixin myComponent()
+    div.my-component
+        p This is an example paragraph

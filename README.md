@@ -47,7 +47,7 @@ A string value that is used to determine your data search pattern.
 Type: `String`
 Default value: `dashboard/generated`
 
-A string value that is used to determine where the dashboard html file with be generated.
+A string value that is used to determine where the dashboard html file will be generated.
 
 #### options.dashTemplate
 Type: `String`
@@ -63,7 +63,7 @@ A string value that is used to determine what handlebars template should be used
 
 #### options.logo
 Type: `String`
-Default value: `empty`
+Default value: `''`
 
 A string value that is used to determine what image should be used in a template as a logo.
 
@@ -78,8 +78,8 @@ This would mostly be used for when you are doing a production build.
 Type: `Array`
 Default value: `[]`
 
-An array of files that will act as includes for any supported markup preprocessor (Jade, EJS, etc).
-This would mostly be used for including files with mixins within them.
+An array of files that will act as includes for any supported markup preprocessor (Jade or Swig).
+This would mostly be used for including files with mixins/macros in them.
 
 ### Usage Examples
 

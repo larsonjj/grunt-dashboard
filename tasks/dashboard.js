@@ -10,10 +10,11 @@
 
 var handlebars = require('handlebars');
 var jade = require('jade');
-var ejs = require('ejs');
 var swig = require('swig');
 var path = require('path');
 var _ = require('underscore');
+_.str = require('underscore.string');
+_.mixin(_.str.exports());
 
 module.exports = function (grunt) {
 
@@ -62,10 +63,6 @@ module.exports = function (grunt) {
                 else if (fileExt === '.jade') {
                     // start build pattern -- //[dash:jade]
                     regbuild = new RegExp('\/\/-\\s*\\[' + options.searchTerm + ':(\\w+)(?:\\(([^\\)]+)\\))?\\s*([^\\s]+)\\s*');
-                }
-                else if (fileExt === '.ejs') {
-                    // start build pattern -- <%# [dash:ejs]
-                    regbuild = new RegExp('<%#-\\s*\\[' + options.searchTerm + ':(\\w+)(?:\\(([^\\)]+)\\))?\\s*([^\\s]+)\\s*');
                 }
                 else if (fileExt === '.swig') {
                     // start build pattern -- {# [dash:swig]
@@ -123,12 +120,14 @@ module.exports = function (grunt) {
         var compileToFile = function(item, type) {
             _.each(_.where(item.collection, {type: type}), function(data) {
 
+                grunt.log.debug(data);
+
                 var files = [];
                 var includes = '';
 
                 var templateFile = grunt.file.read(options.htmlTemplate);
 
-                // Render out HTML from tempate
+                // Render out HTML from template
                 var template = handlebars.compile(templateFile);
                 if (type === 'jade') {
                     // load in needed assets for .jade files
@@ -140,26 +139,17 @@ module.exports = function (grunt) {
                     }
                     data.source = jade.render(includes + data.source, {pretty:true, filename:true});
                 }
-                else if (type === 'ejs') {
-                    // load in needed assets for .ejs files
-                    files = _.filter(grunt.file.expand(options.assets), function(item) {
-                        return item.indexOf('.ejs') > -1;
-                    });
-                    if (files.length > 0) {
-                        includes = '<% include ' + files.join(' %>\n<% include ') + ' %>\n';
-                    }
-                    data.source = ejs.render(includes + data.source, {filename:true});
-                }
                 else if (type === 'swig') {
-                    // load in needed assets for .ejs files
+                    // load in needed assets for .swig files
                     files = _.filter(grunt.file.expand(options.assets), function(item) {
                         return item.indexOf('.swig') > -1;
                     });
                     if (files.length > 0) {
                         files.forEach(function(item) {
-                            includes += '{% import \'' + item  + '\' as ' + path.basename(item, '.swig') + ' %}\n';
+                            includes += '{% import \'' + item  + '\' as ' + _.camelize(path.basename(item, '.swig')) + ' %}\n';
                         });
                     }
+                    grunt.log.debug(includes + data.source);
                     data.source = swig.render(includes + data.source, {filename:true});
                 }
 
@@ -279,9 +269,6 @@ module.exports = function (grunt) {
                     // Grab all Jade data within files and write it to file
                     compileToFile(item, 'jade');
 
-                    // Grab all EJS data within files and write it to file
-                    compileToFile(item, 'ejs');
-
                     // Grab all swig data within files and write it to file
                     compileToFile(item, 'swig');
 
@@ -299,7 +286,6 @@ module.exports = function (grunt) {
 
 
                 if (jsonArray.length > 0) {
-                    console.log(jsonArray);
 
                     // Create data object
                     handlebarsOptions.data = JSON.parse('[' + jsonArray.join(',') + ']');
