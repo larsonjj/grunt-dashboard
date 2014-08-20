@@ -30,8 +30,7 @@ module.exports = function (grunt) {
             searchTerm: 'dash',
             dashTemplate: 'node_modules/grunt-dashboard/dashboard/dashboard-template.hbs',
             htmlTemplate: 'node_modules/grunt-dashboard/dashboard/html-template.hbs',
-            logo: '',
-            assets: []
+            logo: ''
         });
 
         var handlebarsOptions = {};
@@ -117,41 +116,29 @@ module.exports = function (grunt) {
             }
         };
 
-        var compileToFile = function(item, type) {
-            _.each(_.where(item.collection, {type: type}), function(data) {
+        var compileToFile = function(item) {
+            _.each(item, function(data) {
 
                 var files = [];
                 var includes = '';
 
-                var templateFile = grunt.file.read(options.htmlTemplate);
-
-                // Render out HTML from template
-                var template = handlebars.compile(templateFile);
-                if (type === 'jade') {
-                    // load in needed assets for .jade files
-                    files = _.filter(grunt.file.expand(options.assets), function(item) {
-                        return item.indexOf('.jade') > -1;
-                    });
-                    if (files.length > 0) {
-                        includes = 'include ' + files.join('\ninclude ') + '\n\n';
-                    }
+                if (data.type === 'jade') {
+                    grunt.log.debug(data.source);
                     data.source = jade.render(includes + data.source, {pretty:true, filename:true});
                 }
-                else if (type === 'swig') {
-                    // load in needed assets for .swig files
-                    files = _.filter(grunt.file.expand(options.assets), function(item) {
-                        return item.indexOf('.swig') > -1;
-                    });
-                    if (files.length > 0) {
-                        files.forEach(function(item) {
-                            includes += '{% import \'' + item  + '\' as ' + _.camelize(path.basename(item, '.swig')) + ' %}\n';
-                        });
-                    }
-                    grunt.log.debug(includes + data.source);
+                else if (data.type === 'swig') {
+                    grunt.log.debug(data.source);
                     swig.setDefaults({ cache: false }); // Disable caching of templates
                     data.source = swig.render(includes + data.source, {filename:true});
                 }
 
+                // Grab handlebars template for modules
+                var templateFile = grunt.file.read(options.htmlTemplate);
+
+                // Compile out HTML from template
+                var template = handlebars.compile(templateFile);
+
+                //Pass data to template
                 var html = template(data);
 
                 grunt.file.write('./' + options.generatedDir + '/' + data.name + '.html', html);
@@ -263,13 +250,13 @@ module.exports = function (grunt) {
                     jsonData = _.pluck(_.where(item.collection, {type: 'data'}), 'source');
 
                     // Grab all HTML data within files and write it to file
-                    compileToFile(item, 'html');
+                    compileToFile(_.where(item.collection, {type: 'html'}));
 
                     // Grab all Jade data within files and write it to file
-                    compileToFile(item, 'jade');
+                    compileToFile(_.where(item.collection, {type: 'jade'}));
 
                     // Grab all swig data within files and write it to file
-                    compileToFile(item, 'swig');
+                    compileToFile(_.where(item.collection, {type: 'swig'}));
 
                     if (jsonData.length > 1) {
                         jsonData = jsonData.join(',');

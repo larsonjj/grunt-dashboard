@@ -74,13 +74,6 @@ Default value: `true`
 A boolean value that is used to determine if data comments in your HTML files should be removed.
 This would mostly be used for when you are doing a production build.
 
-#### options.assets
-Type: `Array`
-Default value: `[]`
-
-An array of files that will act as includes for any supported markup preprocessor (Jade or Swig).
-This would mostly be used for including files with mixins/macros in them.
-
 ### Usage Examples
 
 #### Default Options
@@ -154,6 +147,8 @@ grunt.initConfig({
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
+<strong>v0.2.0</strong> - Removed `assets` option from task. Imports will now be handled by author within the `:swig` or `:jade` dash comments
+
 <strong>v0.1.9</strong> - Updated jade and swig dependencies
 
 <strong>v0.1.8</strong> - Added swig.setDefaults({ cache: false }); to disable caching problems with Swig modules.

@@ -55,10 +55,7 @@ module.exports = function(grunt) {
             jade: {
                 options: {
                     dashTemplate: 'dashboard/dashboard-template.hbs',
-                    htmlTemplate: 'dashboard/html-template.hbs',
-                    assets: [
-                        'test/fixtures/jade/jade-module.jade'
-                    ]
+                    htmlTemplate: 'dashboard/html-template.hbs'
                 },
                 files: {
                     'tmp/dashboard_jade.html': ['test/fixtures/jade/*.jade']
@@ -67,10 +64,7 @@ module.exports = function(grunt) {
             swig: {
                 options: {
                     dashTemplate: 'dashboard/dashboard-template.hbs',
-                    htmlTemplate: 'dashboard/html-template.hbs',
-                    assets: [
-                        'test/fixtures/swig/swig-module.swig'
-                    ]
+                    htmlTemplate: 'dashboard/html-template.hbs'
                 },
                 files: {
                     'tmp/dashboard_swig.html': ['test/fixtures/swig/*.swig']

@@ -7,6 +7,7 @@
     }
     [/dash] #}
 {# [dash:swig]
+    {% import 'test/fixtures/swig/swig-module.swig' as swigModule %}
     {{ swigModule.content() }}
     [/dash] #}
 
