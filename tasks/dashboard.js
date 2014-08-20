@@ -148,6 +148,7 @@ module.exports = function (grunt) {
                         });
                     }
                     grunt.log.debug(includes + data.source);
+                    swig.setDefaults({ cache: false }); // Disable caching of templates
                     data.source = swig.render(includes + data.source, {filename:true});
                 }
 
