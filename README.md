@@ -154,7 +154,9 @@ grunt.initConfig({
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
-<strong>v0.1.8</strong> - added swig.setDefaults({ cache: false }); to disable caching problems with Swig modules.
+<strong>v0.1.9</strong> - Updated jade and swig dependencies
+
+<strong>v0.1.8</strong> - Added swig.setDefaults({ cache: false }); to disable caching problems with Swig modules.
 
 <strong>v0.1.7</strong> - Removed EJS support. Removed extra console.logs. Added more test compile tasks.
 
