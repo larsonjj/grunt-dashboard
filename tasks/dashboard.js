@@ -120,8 +120,6 @@ module.exports = function (grunt) {
         var compileToFile = function(item, type) {
             _.each(_.where(item.collection, {type: type}), function(data) {
 
-                grunt.log.debug(data);
-
                 var files = [];
                 var includes = '';
 
