@@ -36,38 +36,62 @@ module.exports = function(grunt) {
             default_options: {
                 options: {
                     dashTemplate: 'dashboard/dashboard-template.hbs',
-                    htmlTemplate: 'dashboard/html-template.hbs'
+                    htmlTemplate: 'dashboard/html-template.hbs',
+                    assets: [{
+                        cwd: 'dashboard/assets/',
+                        src: [
+                            '**/*'
+                        ]
+                    }]
                 },
                 files: {
-                    'tmp/dashboard_default.html': ['test/fixtures/default/*.html']
+                    'dashboard/generated/dashboard_default.html': ['test/fixtures/default/*.html']
                 }
             },
             custom_options: {
                 options: {
                     searchTerm: 'custom',
                     dashTemplate: 'dashboard/dashboard-template.hbs',
-                    htmlTemplate: 'dashboard/html-template.hbs'
+                    htmlTemplate: 'dashboard/html-template.hbs',
+                    assets: [{
+                        cwd: 'dashboard/assets/',
+                        src: [
+                            '**/*'
+                        ]
+                    }]
                 },
                 files: {
-                    'tmp/dashboard_custom.html': ['test/fixtures/custom/*.html']
+                    'dashboard/generated/dashboard_custom.html': ['test/fixtures/custom/*.html']
                 }
             },
             jade: {
                 options: {
                     dashTemplate: 'dashboard/dashboard-template.hbs',
-                    htmlTemplate: 'dashboard/html-template.hbs'
+                    htmlTemplate: 'dashboard/html-template.hbs',
+                    assets: [{
+                        cwd: 'dashboard/assets/',
+                        src: [
+                            '**/*'
+                        ]
+                    }]
                 },
                 files: {
-                    'tmp/dashboard_jade.html': ['test/fixtures/jade/*.jade']
+                    'dashboard/generated/dashboard_jade.html': ['test/fixtures/jade/*.jade']
                 }
             },
             swig: {
                 options: {
                     dashTemplate: 'dashboard/dashboard-template.hbs',
-                    htmlTemplate: 'dashboard/html-template.hbs'
+                    htmlTemplate: 'dashboard/html-template.hbs',
+                    assets: [{
+                        cwd: 'dashboard/assets/',
+                        src: [
+                            '**/*'
+                        ]
+                    }]
                 },
                 files: {
-                    'tmp/dashboard_swig.html': ['test/fixtures/swig/*.swig']
+                    'dashboard/generated/dashboard_swig.html': ['test/fixtures/swig/*.swig']
                 }
             }
         },

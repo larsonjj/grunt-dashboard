@@ -30,7 +30,13 @@ module.exports = function (grunt) {
             searchTerm: 'dash',
             dashTemplate: 'node_modules/grunt-dashboard/dashboard/dashboard-template.hbs',
             htmlTemplate: 'node_modules/grunt-dashboard/dashboard/html-template.hbs',
-            logo: ''
+            logo: '',
+            assets: [{
+                cwd: 'node_modules/grunt-dashboard/dashboard/assets/',
+                src: [
+                    '**/*'
+                ]
+            }]
         });
 
         var handlebarsOptions = {};
@@ -320,8 +326,33 @@ module.exports = function (grunt) {
 
                     var html = template(handlebarsOptions);
 
+                    // Remove filename from file.dest path
+                    // ie dashboard/index.html => dashboard/
+                    var assetDir = file.dest.split('/');
+                    assetDir.pop();
+
                     // Write the destination file.
                     grunt.file.write(file.dest, html);
+
+                    var assets;
+
+                    // Grab all files from `options.assets` array
+                    options.assets.forEach(function(item) {
+                        assets = grunt.file.expand({cwd: item.cwd}, item.src);
+
+                        // Copy each file to the same directory where the dashboard will be generated
+                        assets.forEach(function(path) {
+                            if (grunt.file.isFile(item.cwd + path)) {
+                                grunt.file.copy(item.cwd + path, assetDir.join('/') + '/' + path);
+                                grunt.log.debug('%s created at: %s', path, assetDir.join('/') + '/' + path);
+                            }
+                            else if (grunt.file.isDir(item.cwd + path)) {
+                                return;
+                            }
+                        });
+                    });
+
+                    // console.log(assets);
 
                     // Print a success message.
                     grunt.log.writeln('Dashboard created at:  "' + file.dest + '"');

@@ -3,7 +3,7 @@
         "status": "development",
         "category": "module",
         "label": "swig-module",
-        "link": "../dashboard/generated/swig-module.html"
+        "link": "./swig-module.html"
     }
     [/dash] #}
 {# [dash:swig]

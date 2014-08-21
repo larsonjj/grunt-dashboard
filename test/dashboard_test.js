@@ -30,18 +30,48 @@ exports.dashboard = {
   default_options: function (test) {
     test.expect(1);
 
-    var actual = grunt.file.read('tmp/dashboard_default.html');
-    // var expected = grunt.file.read('test/expected/dashboard_default.html');
-    test.ok(actual, 'HTML files should match');
+    var actual = grunt.file.read('dashboard/generated/dashboard_default.html');
+    test.ok(actual, 'HTML files should exist');
 
     test.done();
   },
   custom_options: function (test) {
     test.expect(1);
 
-    var actual = grunt.file.read('tmp/dashboard_custom.html');
-    // var expected = grunt.file.read('test/expected/dashboard_custom.html');
-    test.ok(actual, 'HTML files should match');
+    var actual = grunt.file.read('dashboard/generated/dashboard_custom.html');
+    test.ok(actual, 'HTML files should exist');
+
+    test.done();
+  },
+  jade_options: function (test) {
+    test.expect(1);
+
+    var actual = grunt.file.read('dashboard/generated/dashboard_jade.html');
+    test.ok(actual, 'HTML files should exist');
+
+    test.done();
+  },
+  jade_module: function (test) {
+    test.expect(1);
+
+    var actual = grunt.file.read('dashboard/generated/jade-module.html');
+    test.ok(actual, 'HTML files should exist');
+
+    test.done();
+  },
+  swig_options: function (test) {
+    test.expect(1);
+
+    var actual = grunt.file.read('dashboard/generated/dashboard_swig.html');
+    test.ok(actual, 'HTML files should exist');
+
+    test.done();
+  },
+  swig_module: function (test) {
+    test.expect(1);
+
+    var actual = grunt.file.read('dashboard/generated/swig-module.html');
+    test.ok(actual, 'HTML files should exist');
 
     test.done();
   }

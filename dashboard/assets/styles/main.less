@@ -1,0 +1,221 @@
+html,
+body {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    font-family: 'Helvetica Nue', Helvetica, sans-serif;
+}
+*,
+*:before,
+*:after {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.cf:before,
+.cf:after {
+    content: " ";
+    display: table;
+}
+.cf:after {
+    clear: both;
+}
+ul {
+    -moz-padding-start: 0;
+    -webkit-padding-start: 0;
+    -khtml-padding-start: 0;
+    -o-padding-start: 0;
+    -webkit-margin-before: 0;
+    -moz-margin-before: 0;
+    -khtml-margin-before: 0;
+    -o-margin-before: 0;
+    -webkit-margin-after: 0;
+    -moz-margin-after: 0;
+    -khtml-margin-after: 0;
+    -o-margin-after: 0;
+}
+.hide {
+    display: none;
+}
+.container {
+    margin-left: auto;
+    margin-right: auto;
+    width: 800px;
+}
+.main-title {
+    padding: 10px;
+    text-align: center;
+}
+.item-list,
+.sidebar-list {
+    list-style-type: none;
+}
+.content {
+    float: left;
+    width: 70%;
+    padding: 2.5%;
+}
+.sidebar {
+    float: left;
+    position: relative;
+    width: 30%;
+    padding: 2.5%;
+    border-right: 1px solid #ededed;
+}
+.sidebar-title {
+    font-size: 12px;
+    padding-bottom: 5px;
+    text-transform: uppercase;
+    font-weight: normal;
+    border-bottom: #ededed 1px solid;
+    color: #333;
+}
+.sidebar-list {
+    width: 100%;
+    li {
+        border: none;
+        position: relative;
+        background: #f7f7f7;
+        border-radius: 5px;
+        padding: 3px;
+        margin-bottom: 5px;
+        border: 1px solid #fff;
+        button {
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            font-size: 0.8em;
+        }
+        button:focus {
+            outline: none;
+        }
+    }
+    li:after {
+        content: '✓';
+        position: absolute;
+        display: none;
+        right: 10px;
+        top: 0px;
+        line-height: 32px;
+    }
+    li.active:after {
+        display: block;
+    }
+    li:hover {
+        border: 1px solid #a8d9e3;
+    }
+}
+.item-list {
+    li {
+        border: none;
+        background: #f7f7f7;
+        border-radius: 5px;
+        padding: 7px;
+        margin-bottom: 5px;
+        a {
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            color: inherit;
+            font-size: 0.8em;
+            text-decoration: none;
+        }
+    }
+}
+.font-white {
+    color: #fff;
+}
+.font-black {
+    color: #333;
+}
+.section-wrapper {
+    position: relative;
+}
+.filter-clear {
+    position: absolute;
+    top: -6px;
+    right: 0;
+    background: #ededed;
+    border: none;
+    border-radius: 3px;
+    line-height: 14px;
+    display: none;
+}
+.menu-icon {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: -50px;
+    width: 50px;
+    height: 50px;
+    background: #acacac;
+}
+.menu-bar-list {
+    margin-top: 9px;
+    margin-left: -1px;
+    list-style-type: none;
+    li {
+        border-bottom: 4px solid #fff;
+        height: 9px;
+        margin: 0 13px;
+    }
+}
+li.development {
+    background: #94caeb;
+    color: #fff;
+}
+li.qa {
+    background: #eb9494;
+    color: #fff;
+}
+li.blocked {
+    background: #e74c3c;
+    color: #fff;
+}
+li.queued {
+    background: #c9c9c9;
+    color: #fff;
+}
+li.review {
+    background: #8fbc23;
+    color: #fff;
+}
+li.live {
+    background: #2a4a67;
+    color: #fff;
+}
+@media all and (max-width: 768px) {
+    .sidebar {
+        position: absolute;
+        width: 200px;
+        top: 0;
+        left: -200px;
+        bottom: 0;
+        background: #acacac;
+        border: none;
+    }
+    .sidebar.open {
+        left: 0;
+    }
+    .menu-icon {
+        display: block;
+    }
+    .container {
+        width: 100%;
+    }
+    .content {
+        width: 100%;
+    }
+    .sidebar-title {
+        border-bottom: #fff 1px solid;
+        color: #fff;
+    }
+    .sidebar-list {
+        li {
+            border: 1px solid #acacac;
+        }
+    }
+}

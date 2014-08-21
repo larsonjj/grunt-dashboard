@@ -74,6 +74,28 @@ Default value: `true`
 A boolean value that is used to determine if data comments in your HTML files should be removed.
 This would mostly be used for when you are doing a production build.
 
+#### options.assets
+Type: `Array`
+Default value:
+```
+[{
+    cwd: 'node_modules/grunt-dashboard/dashboard/assets/',
+    src: [
+        '**/*'
+    ]
+}]
+```
+
+An array of file objects that will be copied over with the dashboard html file to the same output directory.
+The file object properties available to you are:
+***cwd***
+directory assets are located in.
+
+***src***
+file search pattern, (*) is a wildcard that matches everything
+
+This would mostly be used for including external stylesheets or scripts you want to use within a custom dashboard template.
+
 ### Usage Examples
 
 #### Default Options
@@ -147,6 +169,8 @@ grunt.initConfig({
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
+<strong>v0.2.1</strong> - Added `assets` option back into the task and acts as an array of file objects that refer to external assets to be loaded within a custom dashboard template. Also added less and jquery to default template.
+
 <strong>v0.2.0</strong> - Removed `assets` option from task. Imports will now be handled by author within the `:swig` or `:jade` dash comments
 
 <strong>v0.1.9</strong> - Updated jade and swig dependencies

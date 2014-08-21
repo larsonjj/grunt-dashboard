@@ -2,8 +2,7 @@
     {
         "status": "development",
         "category": "page",
-        "label": "swig-page",
-        "link": "../dashboard/generated/swig-page.html"
+        "label": "swig-page"
     }
     [/dash] #}
 
