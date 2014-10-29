@@ -31,7 +31,7 @@ module.exports = function (grunt) {
             dashTemplate: 'node_modules/grunt-dashboard/dashboard/dashboard-template.hbs',
             htmlTemplate: 'node_modules/grunt-dashboard/dashboard/html-template.hbs',
             logo: '',
-            data: {},
+            userData: {},
             assets: [{
                 cwd: 'node_modules/grunt-dashboard/dashboard/assets/',
                 src: [
@@ -313,7 +313,7 @@ module.exports = function (grunt) {
                     handlebarsOptions.logo = options.logo;
                     
                     // Set custom data
-                    handlebarsOptions.data = options.data;
+                    handlebarsOptions.userData = options.userData;
 
                     handlebars.registerHelper('ifvalue', function (conditional, options) {
                         if (options.hash.value === conditional) {
