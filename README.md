@@ -175,7 +175,7 @@ grunt.initConfig({
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
-<strong>v0.2.2</strong> - Added `userData` option so that custom variables can be passed from the Grunt task to the Handlebars template.
+<strong>v0.2.2</strong> - Added `data` option so that custom variables can be passed from the Grunt task to the Handlebars template.
 
 <strong>v0.2.1</strong> - Added `assets` option back into the task and acts as an array of file objects that refer to external assets to be loaded within a custom dashboard template. Also added less and jquery to default template.
 
