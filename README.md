@@ -67,7 +67,7 @@ Default value: `''`
 
 A string value that is used to determine what image should be used in a template as a logo.
 
-#### options.userData
+#### options.data
 Type: `Object`
 Default value: `{}`
 
