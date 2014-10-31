@@ -31,7 +31,7 @@ module.exports = function (grunt) {
             dashTemplate: 'node_modules/grunt-dashboard/dashboard/dashboard-template.hbs',
             htmlTemplate: 'node_modules/grunt-dashboard/dashboard/html-template.hbs',
             logo: '',
-            userData: {},
+            data: {},
             assets: [{
                 cwd: 'node_modules/grunt-dashboard/dashboard/assets/',
                 src: [
@@ -280,11 +280,11 @@ module.exports = function (grunt) {
 
                 if (jsonArray.length > 0) {
 
-                    // Create data object
-                    handlebarsOptions.data = JSON.parse('[' + jsonArray.join(',') + ']');
+                    // Create generated data object
+                    handlebarsOptions.generated = JSON.parse('[' + jsonArray.join(',') + ']');
 
                     // Grab all categories
-                    var categories = _.pluck(handlebarsOptions.data, 'category');
+                    var categories = _.pluck(handlebarsOptions.generated, 'category');
                     categories = _.uniq(categories);
                     categories = categories.map(function(val) {
                         return {
@@ -294,7 +294,7 @@ module.exports = function (grunt) {
                     });
 
                     // Grab all categories
-                    var statuses = _.pluck(handlebarsOptions.data, 'status');
+                    var statuses = _.pluck(handlebarsOptions.generated, 'status');
                     statuses = _.uniq(statuses);
                     statuses = statuses.map(function(val) {
                         return {
@@ -313,7 +313,7 @@ module.exports = function (grunt) {
                     handlebarsOptions.logo = options.logo;
                     
                     // Set custom data
-                    handlebarsOptions.userData = options.userData;
+                    handlebarsOptions.data = options.data;
 
                     handlebars.registerHelper('ifvalue', function (conditional, options) {
                         if (options.hash.value === conditional) {
