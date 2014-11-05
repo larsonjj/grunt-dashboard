@@ -67,6 +67,12 @@ Default value: `''`
 
 A string value that is used to determine what image should be used in a template as a logo.
 
+#### options.data
+Type: `Object`
+Default value: `{}`
+
+An object of custom variables that will be passed to the Handlebars template. Useful if you want to pass things like version information or other custom variables from your Grunt build process.
+
 #### options.debug
 Type: `Boolean`
 Default value: `true`
@@ -169,6 +175,8 @@ grunt.initConfig({
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
+<strong>v0.2.2</strong> - Added `data` option so that custom variables can be passed from the Grunt task to the Handlebars template.
+
 <strong>v0.2.1</strong> - Added `assets` option back into the task and acts as an array of file objects that refer to external assets to be loaded within a custom dashboard template. Also added less and jquery to default template.
 
 <strong>v0.2.0</strong> - Removed `assets` option from task. Imports will now be handled by author within the `:swig` or `:jade` dash comments
