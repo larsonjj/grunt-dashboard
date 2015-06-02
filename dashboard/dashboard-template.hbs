@@ -1,6 +1,6 @@
-<!DOCTYPE html><!--[if IE 8]><html class="ie8" lang="en"><![endif]-->
-<!--[if IE 9]><html lang="en" class="ie9"><![endif]-->
-<!--[if !IE]><!-->
+<!DOCTYPE html><!--[if lte IE 9]>
+<html class='lt-ie9 no-js' lang='en'><![endif]-->
+<!--[if gt IE 9]><!-->
 <html lang="en"><!--<![endif]-->
     <head>
         <meta charset="utf-8">
@@ -9,27 +9,6 @@
         <meta name="description" content="A Simple Dashboard">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet/less" type="text/css" href="styles/main.less" />
-        <!--[if IE 8]>
-        <script>
-            // Protect window.console method calls, e.g. console is not defined on IE
-            (function() {
-                if (!window.console) {
-                    window.console = {};
-                }
-                // union of Chrome, FF, IE, and Safari console methods
-                var m = [
-                    "log", "info", "warn", "error", "debug", "trace", "dir", "group",
-                    "groupCollapsed", "groupEnd", "time", "timeEnd", "profile", "profileEnd",
-                    "dirxml", "assert", "count", "markTimeline", "timeStamp", "clear"
-                ];
-                // define undefined methods as noops to prevent errors
-                for (var i = 0; i < m.length; i++) {
-                    if (!window.console[m[i]]) {
-                        window.console[m[i]] = function() {};
-                    }
-                }
-            })();
-        </script><![endif]-->
         <script src="scripts/less.js" type="text/javascript"></script>
     </head>
     <body class="dashboard-body">

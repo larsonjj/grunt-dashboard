@@ -175,6 +175,8 @@ grunt.initConfig({
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
+<strong>v1.0.0</strong> - Updated Less to 2.5.1. Updated jQuery to 2.1.4. Switched to eslint from jshint. Removed support for IE8
+
 <strong>v0.3.1</strong> - Updated Swig, Jade, and Handlbars to their latest versions.
 
 <strong>v0.3.0</strong> - Added `data` option so that custom variables can be passed from the Grunt task to the Handlebars template. API break: `data` inside handlbars templates has changed to `generated`. Update your custom templates accordingly.
