@@ -36,7 +36,7 @@ module.exports = function(grunt) {
         options: {
           dashTemplate: 'dashboard/dashboard-template.hbs',
           moduleTemplate: 'dashboard/module-template.hbs',
-          assets: [{
+          includes: [{
             cwd: 'dashboard/assets/',
             src: [
               '**/*'
@@ -52,7 +52,7 @@ module.exports = function(grunt) {
           searchTerm: 'custom',
           dashTemplate: 'dashboard/dashboard-template.hbs',
           moduleTemplate: 'dashboard/module-template.hbs',
-          assets: [{
+          includes: [{
             cwd: 'dashboard/assets/',
             src: [
               '**/*'
@@ -67,7 +67,7 @@ module.exports = function(grunt) {
         options: {
           dashTemplate: 'dashboard/dashboard-template.hbs',
           moduleTemplate: 'dashboard/module-template.hbs',
-          assets: [{
+          includes: [{
             cwd: 'dashboard/assets/',
             src: [
               '**/*'
@@ -84,7 +84,7 @@ module.exports = function(grunt) {
           compilerOptions: {filename: true},
           dashTemplate: 'dashboard/dashboard-template.hbs',
           moduleTemplate: 'dashboard/module-template.hbs',
-          assets: [{
+          includes: [{
             cwd: 'dashboard/assets/',
             src: [
               '**/*'

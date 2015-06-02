@@ -111,7 +111,7 @@ module.exports = function (grunt) {
 
           // Set a default link if none is found
           if (!data.link) {
-            data.link = '/' + filepath;
+            data.link = '/' + filepath.replace('dash.json', 'html');
           }
 
           // Set a default status if none is found
