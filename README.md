@@ -55,9 +55,9 @@ Default value: `node_modules/grunt-dashboard/dashboard/dashboard-template.hbs`
 
 A string value that is used to determine what handlebars template should be used for generating the dashboard.
 
-#### options.htmlTemplate
+#### options.moduleTemplate
 Type: `String`
-Default value: `node_modules/grunt-dashboard/dashboard/html-template.hbs`
+Default value: `node_modules/grunt-dashboard/dashboard/module-template.hbs`
 
 A string value that is used to determine what handlebars template should be used for generating components and other HTML partials.
 
@@ -161,7 +161,7 @@ grunt.initConfig({
     options: {
       searchTerm: 'custom',
       dashTemplate: 'dashboard/dashboard-template.hbs',
-      htmlTemplate: 'dashboard/html-template.hbs',
+      htmlTemplate: 'dashboard/module-template.hbs',
       generatedDir: 'dashboard/generated'
     },
     files: {

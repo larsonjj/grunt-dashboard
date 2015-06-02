@@ -29,7 +29,7 @@ module.exports = function (grunt) {
       generatedDir: 'dashboard/generated',
       searchTerm: 'dash',
       dashTemplate: 'node_modules/grunt-dashboard/dashboard/dashboard-template.hbs',
-      htmlTemplate: 'node_modules/grunt-dashboard/dashboard/html-template.hbs',
+      moduleTemplate: 'node_modules/grunt-dashboard/dashboard/module-template.hbs',
       logo: '',
       data: {},
       assets: [{
@@ -141,7 +141,7 @@ module.exports = function (grunt) {
         }
 
         // Grab handlebars template for modules
-        var templateFile = grunt.file.read(options.htmlTemplate);
+        var templateFile = grunt.file.read(options.moduleTemplate);
 
         // Compile out HTML from template
         var template = handlebars.compile(templateFile);
