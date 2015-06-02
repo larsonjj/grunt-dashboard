@@ -35,7 +35,7 @@ module.exports = function(grunt) {
       defaultOptions: {
         options: {
           dashTemplate: 'dashboard/dashboard-template.hbs',
-          htmlTemplate: 'dashboard/html-template.hbs',
+          moduleTemplate: 'dashboard/module-template.hbs',
           assets: [{
             cwd: 'dashboard/assets/',
             src: [
@@ -44,14 +44,14 @@ module.exports = function(grunt) {
           }]
         },
         files: {
-          'dashboard/generated/dashboard_default.html': ['test/fixtures/default/*.html']
+          'dashboard/generated/dashboard_default.html': ['test/fixtures/default/*.dash.json']
         }
       },
       customOptions: {
         options: {
           searchTerm: 'custom',
           dashTemplate: 'dashboard/dashboard-template.hbs',
-          htmlTemplate: 'dashboard/html-template.hbs',
+          moduleTemplate: 'dashboard/module-template.hbs',
           assets: [{
             cwd: 'dashboard/assets/',
             src: [
@@ -60,13 +60,13 @@ module.exports = function(grunt) {
           }]
         },
         files: {
-          'dashboard/generated/dashboard_custom.html': ['test/fixtures/custom/*.html']
+          'dashboard/generated/dashboard_custom.html': ['test/fixtures/custom/*.dash.json']
         }
       },
       jade: {
         options: {
           dashTemplate: 'dashboard/dashboard-template.hbs',
-          htmlTemplate: 'dashboard/html-template.hbs',
+          moduleTemplate: 'dashboard/module-template.hbs',
           assets: [{
             cwd: 'dashboard/assets/',
             src: [
@@ -75,13 +75,15 @@ module.exports = function(grunt) {
           }]
         },
         files: {
-          'dashboard/generated/dashboard_jade.html': ['test/fixtures/jade/*.jade']
+          'dashboard/generated/dashboard_jade.html': ['test/fixtures/jade/**/*.dash.{jade,json}']
         }
       },
       swig: {
         options: {
+          compiler: require('swig'),
+          compilerOptions: {filename: true},
           dashTemplate: 'dashboard/dashboard-template.hbs',
-          htmlTemplate: 'dashboard/html-template.hbs',
+          moduleTemplate: 'dashboard/module-template.hbs',
           assets: [{
             cwd: 'dashboard/assets/',
             src: [
@@ -90,7 +92,7 @@ module.exports = function(grunt) {
           }]
         },
         files: {
-          'dashboard/generated/dashboard_swig.html': ['test/fixtures/swig/*.swig']
+          'dashboard/generated/dashboard_swig.html': ['test/fixtures/swig/**/*.dash.{swig,json}']
         }
       }
     },

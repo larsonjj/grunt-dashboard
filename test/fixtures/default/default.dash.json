@@ -2,5 +2,5 @@
   "status": "development",
   "category": "page",
   "label": "Home",
-  "link": "../test/fixtures/default/default_regex.html"
+  "link": "../test/fixtures/default/default.html"
 }

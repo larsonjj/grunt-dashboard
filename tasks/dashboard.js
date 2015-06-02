@@ -44,30 +44,29 @@ module.exports = function (grunt) {
     var handlebarsOptions = {};
 
     var compileToFile = function(item) {
-      _.each(item, function(data) {
 
-        grunt.log.debug(data.source);
-        try {
-          data.source = options.compiler.render(data.source, options.compilerOptions);
-        }
-        catch (e) {
-          grunt.log.error('Data inside "' + name + '" is not in correct JSON format');
-          grunt.log.error('------- Details Below -------');
-          grunt.log.errorlns(e);
-        }
+      grunt.log.debug(item.source);
 
-        // Grab handlebars template for modules
-        var templateFile = grunt.file.read(options.moduleTemplate);
+      try {
+        item.source = options.compiler.render(item.source, options.compilerOptions);
+      }
+      catch (e) {
+        grunt.log.error('Data inside "' + item.name + '" will not compile');
+        grunt.log.error('------- Details Below -------');
+        grunt.log.errorlns(e);
+      }
 
-        // Compile out HTML from template
-        var template = handlebars.compile(templateFile);
+      // Grab handlebars template for modules
+      var templateFile = grunt.file.read(options.moduleTemplate);
 
-        //Pass data to template
-        var html = template(data);
+      // Compile out HTML from template
+      var template = handlebars.compile(templateFile);
 
-        grunt.file.write('./' + options.generatedDir + '/' + data.name + '.html', html);
-        grunt.log.writeln('HTML file created at:  "' + options.generatedDir + '/' + data.name + '.html"');
-      });
+      //Pass data to template
+      var html = template(item);
+
+      grunt.file.write('./' + options.generatedDir + '/' + item.name + '.html', html);
+      grunt.log.writeln('HTML file created at:  "' + options.generatedDir + '/' + item.name + '.html"');
     };
 
     var getExtension = function(filename) {
@@ -78,7 +77,7 @@ module.exports = function (grunt) {
     // Iterate over all specified file groups (ie: output destination(s)).
     this.files.forEach(function (file) {
       // Concat specified files.
-      var output = file.src.filter(function (filepath) {
+      var output = file.src.filter(function(filepath) {
         // Warn on and remove invalid source files (if nonull was set).
         if (!grunt.file.exists(filepath)) {
           grunt.log.warn('Source file "' + filepath + '" not found.');
@@ -94,7 +93,7 @@ module.exports = function (grunt) {
 
         var data = {};
 
-        if (fileExt === 'json') {
+        if (fileExt === '.json') {
           // Test to make sure data is JSON compatible
           try {
             data = JSON.parse(src);
@@ -134,7 +133,7 @@ module.exports = function (grunt) {
           return {
             source: src,
             type: 'non-json',
-            name: path.basename(filepath, '.' + fileExt)
+            name: path.basename(filepath, '.dash' + fileExt)
           };
         }
 
@@ -144,29 +143,20 @@ module.exports = function (grunt) {
         grunt.log.warn('Destination not written because file were empty.');
       }
       else {
-        var jsonData;
         var jsonArray = [];
 
         output.forEach(function(item) {
 
-          console.log(item);
+          // console.log(item);
 
-          // Grab all JSON data within files
-          jsonData = _.pluck(_.where(item, {type: 'json'}), 'source');
-
-          if (jsonData.length > 1) {
-            jsonData = jsonData.join(',');
+          if (item.type === 'json') {
+            jsonArray.push(item.source);
           }
           else {
-            jsonData = jsonData.join('');
+            // Grab all non-JSON sources within files and compile it to HTML file
+            compileToFile(item);
           }
 
-          if (jsonData !== '') {
-            jsonArray.push(jsonData);
-          }
-
-          // Grab all non-JSON sources within files and compile it to HTML file
-          compileToFile(_.where(item, {type: 'non-json'}));
         });
 
 
