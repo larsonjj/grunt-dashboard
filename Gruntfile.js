@@ -14,15 +14,14 @@ module.exports = function(grunt) {
 
   // Project configuration.
   grunt.initConfig({
-    jshint: {
+    eslint: {
       all: [
         'Gruntfile.js',
         'tasks/*.js',
         '<%= nodeunit.tests %>'
       ],
       options: {
-        jshintrc: '.jshintrc',
-        reporter: require('jshint-stylish')
+        configFile: '.eslintrc'
       }
     },
 
@@ -33,7 +32,7 @@ module.exports = function(grunt) {
 
     // Configuration to be run (and then tested).
     dashboard: {
-      default_options: {
+      defaultOptions: {
         options: {
           dashTemplate: 'dashboard/dashboard-template.hbs',
           htmlTemplate: 'dashboard/html-template.hbs',
@@ -48,7 +47,7 @@ module.exports = function(grunt) {
           'dashboard/generated/dashboard_default.html': ['test/fixtures/default/*.html']
         }
       },
-      custom_options: {
+      customOptions: {
         options: {
           searchTerm: 'custom',
           dashTemplate: 'dashboard/dashboard-template.hbs',
@@ -111,6 +110,6 @@ module.exports = function(grunt) {
   grunt.registerTask('test', ['clean', 'dashboard', 'nodeunit']);
 
   // By default, lint and run all tests.
-  grunt.registerTask('default', ['jshint', 'test']);
+  grunt.registerTask('default', ['eslint', 'test']);
 
 };

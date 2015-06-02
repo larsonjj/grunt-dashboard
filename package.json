@@ -24,16 +24,15 @@
   "dependencies": {
     "handlebars": "^2.0.0",
     "underscore": "~1.6.0",
-    "underscore.string": "~2.3.3",
-    "jade": "^1.9.1",
-    "swig": "^1.4.2"
+    "underscore.string": "~2.3.3"
   },
   "devDependencies": {
+    "jade": "^1.9.1",
+    "swig": "^1.4.2",
     "grunt-contrib-clean": "0.5.0",
-    "grunt-contrib-jshint": "0.8.0",
+    "grunt-eslint": "~7.0.1",
     "grunt-contrib-nodeunit": "0.3.0",
     "grunt": "~0.4.2",
-    "jshint-stylish": "0.1.5",
     "load-grunt-tasks": "0.3.0"
   },
   "scripts": {

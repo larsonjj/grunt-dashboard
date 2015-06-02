@@ -9,8 +9,6 @@
 'use strict';
 
 var handlebars = require('handlebars');
-var jade = require('jade');
-var swig = require('swig');
 var path = require('path');
 var _ = require('underscore');
 _.str = require('underscore.string');
@@ -25,14 +23,17 @@ module.exports = function (grunt) {
 
     // Merge task-specific and/or target-specific options with these defaults.
     var options = this.options({
-      debug: true,
+      // Allows author to use custom compiler
+      // NOTE: needs to have a compile() method or it won't work
+      compiler: require('jade'),
+      compilerOptions: {pretty: true, filename: true},
       generatedDir: 'dashboard/generated',
-      searchTerm: 'dash',
+      // searchTerm: 'dash',
       dashTemplate: 'node_modules/grunt-dashboard/dashboard/dashboard-template.hbs',
       moduleTemplate: 'node_modules/grunt-dashboard/dashboard/module-template.hbs',
-      logo: '',
+      // logo: '',
       data: {},
-      assets: [{
+      includes: [{
         cwd: 'node_modules/grunt-dashboard/dashboard/assets/',
         src: [
           '**/*'
@@ -42,102 +43,17 @@ module.exports = function (grunt) {
 
     var handlebarsOptions = {};
 
-    // Remove whitespace and newlines
-    var stripInvisibles = function(string) {
-      return string.replace(/\n/g, '').replace(/\s/g, '').replace(/\t/g, '');
-    };
-
-    var toTitleCase = function(str) {
-      return str.replace(/\w\S*/g, function(txt){
-        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-      });
-    };
-
-    var parseLines = function(str, fileExt) {
-      var lines = str.replace(/\r\n/g, '\n').split(/\n/);
-      var lineArray = [];
-      var contentArray = [];
-      var record = false;
-      var type;
-
-      lines.some(function (line) {
-        var regbuild;
-        var regend = new RegExp('\\s*\\[\\s*\\/\\s*' + options.searchTerm + '\\s*\\]\\s*');
-        if (fileExt === '.html') {
-          // start build pattern -- <!-- [dash:html]
-          regbuild = new RegExp('<!--\\s*\\[' + options.searchTerm + ':(\\w+)(?:\\(([^\\)]+)\\))?\\s*([^\\s]+)\\s*');
-        }
-        else if (fileExt === '.jade') {
-          // start build pattern -- //[dash:jade]
-          regbuild = new RegExp('\/\/-\\s*\\[' + options.searchTerm + ':(\\w+)(?:\\(([^\\)]+)\\))?\\s*([^\\s]+)\\s*');
-        }
-        else if (fileExt === '.swig') {
-          // start build pattern -- {# [dash:swig]
-          regbuild = new RegExp('{#\\s*\\[' + options.searchTerm + ':(\\w+)(?:\\(([^\\)]+)\\))?\\s*([^\\s]+)\\s*');
-        }
-        else {
-          grunt.log.error('File type not supported: %s', fileExt);
-        }
-
-        // var indent = (line.match(/^\s*/) || [])[0];
-        var build = line.match(regbuild);
-        var startbuild = regbuild.test(line);
-        var endbuild = regend.test(line);
-
-        if (endbuild) {
-          record = false;
-          contentArray.push({
-            source: lineArray.join('\n'),
-            type: type
-          });
-          lineArray = [];
-        }
-
-        if (record) {
-          if (fileExt === '.jade') {
-            line = line.replace(/^(\s+|\t+)/, '');
-          }
-          lineArray.push(line);
-        }
-
-        if (startbuild) {
-          record = true;
-          if (build[1]) {
-            type = build[1];
-          }
-          else {
-            type = 'data';
-          }
-        }
-
-      });
-
-      return contentArray;
-    };
-
-    // Remove all data comments from HTML file
-    var removeDataComments = function(str, filepath) {
-      var regAll = new RegExp('<!--\\s*\\[' + options.searchTerm + ':(\\w+)(?:\\(([^\\)]+)\\))?\\s*([^\\s]+)\\s*[\\s\\S]*?-->', 'g');
-      var containsData = regAll.test(str);
-      if (containsData) {
-        grunt.file.write(filepath, str.replace(regAll, ''));
-      }
-    };
-
     var compileToFile = function(item) {
       _.each(item, function(data) {
 
-        // var files = [];
-        var includes = '';
-
-        if (data.type === 'jade') {
-          grunt.log.debug(data.source);
-          data.source = jade.render(includes + data.source, {pretty: true, filename: true});
+        grunt.log.debug(data.source);
+        try {
+          data.source = options.compiler.render(data.source, options.compilerOptions);
         }
-        else if (data.type === 'swig') {
-          grunt.log.debug(data.source);
-          swig.setDefaults({ cache: false }); // Disable caching of templates
-          data.source = swig.render(includes + data.source, {filename: true});
+        catch (e) {
+          grunt.log.error('Data inside "' + name + '" is not in correct JSON format');
+          grunt.log.error('------- Details Below -------');
+          grunt.log.errorlns(e);
         }
 
         // Grab handlebars template for modules
@@ -175,74 +91,52 @@ module.exports = function (grunt) {
         // Read file source.
         var src = grunt.file.read(filepath);
         var fileExt = getExtension(filepath);
-        var parsedResult;
 
-        // Handle options.
-        // Take file source, convert to string and parse for regexp matches
-        parsedResult = parseLines(src.toString(), fileExt);
+        var data = {};
 
-        if (!options.debug) {
-          removeDataComments(src.toString(), filepath);
+        if (fileExt === 'json') {
+          // Test to make sure data is JSON compatible
+          try {
+            data = JSON.parse(src);
+          }
+          catch (e) {
+            grunt.log.error('Data inside "' + file.src + '" is not in correct JSON format');
+            grunt.log.error('------- Details Below -------');
+            grunt.log.errorlns(e);
+          }
+
+          // Set a default label if none is found
+          if (!data.label) {
+            data.label = path.basename(filepath, '.html');
+          }
+
+          // Set a default link if none is found
+          if (!data.link) {
+            data.link = '/' + filepath;
+          }
+
+          // Set a default status if none is found
+          if (!data.status) {
+            data.status = 'unknown';
+          }
+
+          // Set a default category if none is found
+          if (!data.category) {
+            data.category = 'unknown';
+          }
+
+          return {
+            source: JSON.stringify(data),
+            type: 'json'
+          };
         }
-
-        return {
-          collection: parsedResult.map(function(item) {
-            var data = {};
-            // Remove newlines and spaces (\n, \s)
-            src = stripInvisibles(item.source);
-
-            if (item.type === 'data') {
-              // Test to make sure data is JSON compatible
-              try {
-                data = JSON.parse(src);
-              }
-              catch (e) {
-                grunt.log.error('Data inside "' + file.src + '" is not in correct JSON format');
-                grunt.log.error('------- Details Below -------');
-                grunt.log.errorlns(e);
-              }
-
-              // Set a default label if none is found
-              if (!data.label) {
-                data.label = path.basename(filepath, '.html');
-              }
-
-              // Set a default link if none is found
-              if (!data.link) {
-                data.link = '/' + filepath;
-              }
-
-              // Set a default status if none is found
-              if (!data.status) {
-                data.status = 'unknown';
-              }
-
-              // Set a default category if none is found
-              if (!data.category) {
-                data.category = 'unknown';
-              }
-
-              return {
-                source: JSON.stringify(data),
-                type: 'data'
-              };
-            }
-            else if (item.type) {
-              return {
-                source: item.source,
-                type: item.type,
-                name: path.basename(filepath, '.' + item.type)
-              };
-            }
-            else {
-              grunt.log.error('Type Error! must be "data" or "html"');
-              return {
-                source: '',
-                type: 'error'
-              };
-            }
-          })
-        };
+        else {
+          return {
+            source: src,
+            type: 'non-json',
+            name: path.basename(filepath, '.' + fileExt)
+          };
+        }
 
       });
 
@@ -255,17 +149,10 @@ module.exports = function (grunt) {
 
         output.forEach(function(item) {
 
+          console.log(item);
+
           // Grab all JSON data within files
-          jsonData = _.pluck(_.where(item.collection, {type: 'data'}), 'source');
-
-          // Grab all HTML data within files and write it to file
-          compileToFile(_.where(item.collection, {type: 'html'}));
-
-          // Grab all Jade data within files and write it to file
-          compileToFile(_.where(item.collection, {type: 'jade'}));
-
-          // Grab all swig data within files and write it to file
-          compileToFile(_.where(item.collection, {type: 'swig'}));
+          jsonData = _.pluck(_.where(item, {type: 'json'}), 'source');
 
           if (jsonData.length > 1) {
             jsonData = jsonData.join(',');
@@ -277,6 +164,9 @@ module.exports = function (grunt) {
           if (jsonData !== '') {
             jsonArray.push(jsonData);
           }
+
+          // Grab all non-JSON sources within files and compile it to HTML file
+          compileToFile(_.where(item, {type: 'non-json'}));
         });
 
 
@@ -291,7 +181,7 @@ module.exports = function (grunt) {
           categories = categories.map(function(val) {
             return {
               class: val,
-              name: toTitleCase(val)
+              name: _.titleize(val)
             };
           });
 
@@ -301,7 +191,7 @@ module.exports = function (grunt) {
           statuses = statuses.map(function(val) {
             return {
               class: val,
-              name: toTitleCase(val)
+              name: _.titleize(val)
             };
           });
 
@@ -317,6 +207,7 @@ module.exports = function (grunt) {
           // Set custom data
           handlebarsOptions.data = options.data;
 
+          // Create if value helper for Handlebars templates
           handlebars.registerHelper('ifvalue', function (conditional, config) {
             if (config.hash.value === conditional) {
               return config.fn(this);
@@ -326,11 +217,13 @@ module.exports = function (grunt) {
             }
           });
 
+          // Read the dashboard handlebars template
           var templateFile = grunt.file.read(options.dashTemplate);
 
-          // Render out HTML from tempate
+          // Compile template source
           var template = handlebars.compile(templateFile);
 
+          // Create HTML from template, data, and config
           var html = template(handlebarsOptions);
 
           // Remove filename from file.dest path
@@ -341,14 +234,14 @@ module.exports = function (grunt) {
           // Write the destination file.
           grunt.file.write(file.dest, html);
 
-          var assets;
+          var includes;
 
-          // Grab all files from `options.assets` array
-          options.assets.forEach(function(item) {
-            assets = grunt.file.expand({cwd: item.cwd}, item.src);
+          // Grab all files from `options.includes` array
+          options.includes.forEach(function(item) {
+            includes = grunt.file.expand({cwd: item.cwd}, item.src);
 
             // Copy each file to the same directory where the dashboard will be generated
-            assets.forEach(function(filePath) {
+            includes.forEach(function(filePath) {
               if (grunt.file.isFile(item.cwd + filePath)) {
                 grunt.file.copy(item.cwd + filePath, assetDir.join('/') + '/' + filePath);
                 grunt.log.debug('%s created at: %s', filePath, assetDir.join('/') + '/' + filePath);
@@ -359,7 +252,7 @@ module.exports = function (grunt) {
             });
           });
 
-          // console.log(assets);
+          // console.log(includes);
 
           // Print a success message.
           grunt.log.writeln('Dashboard created at:  "' + file.dest + '"');

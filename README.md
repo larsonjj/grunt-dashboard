@@ -37,11 +37,11 @@ grunt.initConfig({
 
 ### Options
 
-#### options.searchTerm
+<!-- #### options.searchTerm
 Type: `String`
 Default value: `dash`
 
-A string value that is used to determine your data search pattern.
+A string value that is used to determine your data search pattern. -->
 
 #### options.generatedDir
 Type: `String`
@@ -60,27 +60,27 @@ Type: `String`
 Default value: `node_modules/grunt-dashboard/dashboard/module-template.hbs`
 
 A string value that is used to determine what handlebars template should be used for generating components and other HTML partials.
-
+<!--
 #### options.logo
 Type: `String`
 Default value: `''`
 
-A string value that is used to determine what image should be used in a template as a logo.
+A string value that is used to determine what image should be used in a template as a logo. -->
 
 #### options.data
 Type: `Object`
 Default value: `{}`
 
 An object of custom variables that will be passed to the Handlebars template. Useful if you want to pass things like version information or other custom variables from your Grunt build process.
-
+<!--
 #### options.debug
 Type: `Boolean`
 Default value: `true`
 
 A boolean value that is used to determine if data comments in your HTML files should be removed.
-This would mostly be used for when you are doing a production build.
+This would mostly be used for when you are doing a production build. -->
 
-#### options.assets
+#### options.includes
 Type: `Array`
 Default value:
 ```
