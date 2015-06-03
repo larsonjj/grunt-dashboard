@@ -1,7 +1,7 @@
 {
   "name": "grunt-dashboard",
-  "version": "0.3.1",
-  "description": "Generates a static dashboard based on data parsed within specified files",
+  "version": "1.0.0",
+  "description": "Generates a static dashboard based on data and templates parsed within specified files",
   "homepage": "https://github.com/larsonjj/grunt-dashboard",
   "repository": "https://github.com/larsonjj/grunt-dashboard",
   "author": {
@@ -10,7 +10,8 @@
     "url": "jakelarson.io"
   },
   "keywords": [
-    "gruntplugin"
+    "gruntplugin",
+    "dashboard"
   ],
   "main": "Gruntfile.js",
   "engines": {
@@ -22,12 +23,12 @@
     }
   ],
   "dependencies": {
-    "handlebars": "^2.0.0",
+    "handlebars": "^3.0.0",
     "underscore": "~1.6.0",
     "underscore.string": "~2.3.3"
   },
   "devDependencies": {
-    "jade": "^1.9.1",
+    "jade": "^1.10.1",
     "swig": "^1.4.2",
     "grunt-contrib-clean": "0.5.0",
     "grunt-eslint": "~7.0.1",
