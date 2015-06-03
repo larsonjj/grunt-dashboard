@@ -1,6 +1,6 @@
 {
   "name": "grunt-dashboard",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Generates a static dashboard based on data and templates parsed within specified files",
   "homepage": "https://github.com/larsonjj/grunt-dashboard",
   "repository": "https://github.com/larsonjj/grunt-dashboard",
@@ -24,8 +24,8 @@
   ],
   "dependencies": {
     "handlebars": "^3.0.0",
-    "underscore": "~1.6.0",
-    "underscore.string": "~2.3.3"
+    "underscore": "~1.8.2",
+    "underscore.string": "~3.0.3"
   },
   "devDependencies": {
     "jade": "^1.10.1",
