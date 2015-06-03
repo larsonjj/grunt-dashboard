@@ -24,8 +24,8 @@
   ],
   "dependencies": {
     "handlebars": "^3.0.0",
-    "underscore": "~1.6.0",
-    "underscore.string": "~2.3.3"
+    "underscore": "~1.8.2",
+    "underscore.string": "~3.0.3"
   },
   "devDependencies": {
     "jade": "^1.10.1",
