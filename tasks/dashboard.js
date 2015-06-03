@@ -57,6 +57,9 @@ module.exports = function (grunt) {
         grunt.log.errorlns(e);
       }
 
+      // Add data to template
+      item.data = options.data;
+
       // Grab handlebars template for modules
       var templateFile = grunt.file.read(options.moduleTemplate);
 
