@@ -1,77 +1,69 @@
-/*jshint browser: true*/
-/*global $:false */
 'use strict';
-(function($) {
+$(function() {
 
+  var $itemItems = $('.item-list li');
+  var $categoryItems = $('.category li');
+  var $legendItems = $('.legend li');
 
-    var $itemItems = $('.item-list li');
-    var categoryItems = $('.category li');
-    var legendItems = $('.legend li');
+  var $clearButtons = $('.filter-clear');
 
-    var clearButtons = $('.filter-clear');
+  var $sidebar = $('.sidebar');
+  var $menuButton = $('.dash-button-wrapper');
+  var isOpen = false;
 
-    var sidebar = $('.sidebar');
-    var menuButton = $('.menu-icon');
-    var isOpen = false;
+  var changeActiveItem = function(items, theClass, $context) {
+    items.removeClass(theClass);
+    $context.addClass(theClass);
+  };
 
-    var changeActiveItem = function($items, theClass, $context) {
-        $items.removeClass(theClass);
-        $context.addClass(theClass);
-    };
+  var clearFilters = function($context) {
+    $context.addClass('hide');
+    var $listItems = $context.parent().find('li');
+    $listItems.removeClass('active');
+  };
 
-    var clearFilters = function($context) {
-        $context.css('display', 'none');
-        var listItems = $context.parent().find('li');
-        $(listItems).removeClass('active');
+  var showClearButton = function($context) {
+    $context.parent().parent().find('.filter-clear').removeClass('hide');
+  };
 
-    };
+  var filterItems = function() {
+    var $categories = $('.sidebar .active').map(function(i, item) {
+      return $(item).data('category');
+    });
+    $itemItems.addClass('hide');
+    $itemItems.filter('.' + $categories.get().join('.')).removeClass('hide');
+  };
 
-    var showClearButton = function($context) {
-        $context.parent().parent().find('.filter-clear').css('display', 'block');
-    };
+  var catItemsClick = function() {
+    changeActiveItem($categoryItems, 'active', $(this));
+    filterItems();
+  };
 
-    var filterItems = function() {
-        var $activeSidebarItems = $('.sidebar .active');
-        var filters = $activeSidebarItems.data('category');
+  var legendItemsClick = function() {
+    changeActiveItem($legendItems, 'active', $(this));
+    showClearButton($(this));
+    filterItems();
+  };
 
-        // filter list items based on category matches
-        $itemItems.addClass('hide');
-        $itemItems.filter('.' + filters).removeClass('hide');
-    };
+  var clearButtonsClick = function() {
+    clearFilters($(this));
+    filterItems();
+  };
 
-    var catItemsClick = function() {
-        changeActiveItem(categoryItems, 'active', $(this));
-        filterItems();
-    };
+  var menuButtonClick = function() {
+    if (!isOpen) {
+      isOpen = true;
+      $sidebar.addClass('open');
+    }
+    else {
+      isOpen = false;
+      $sidebar.removeClass('open');
+    }
+  };
 
-    var legendItemsClick = function() {
-        changeActiveItem(legendItems, 'active', $(this));
-        showClearButton($(this));
-        filterItems();
-    };
+  $categoryItems.on('click', catItemsClick);
+  $legendItems.on('click', legendItemsClick);
+  $clearButtons.on('click', clearButtonsClick);
+  $menuButton.on('click', menuButtonClick);
 
-    var clearButtonsClick = function() {
-        clearFilters($(this));
-        filterItems();
-    };
-
-    var menuButtonClick = function() {
-        if (!isOpen) {
-            isOpen = true;
-            sidebar.addClass('open');
-        } else {
-            isOpen = false;
-            sidebar.removeClass('open');
-        }
-    };
-
-    // Events
-    categoryItems.on('click', catItemsClick);
-
-    legendItems.on('click', legendItemsClick);
-
-    clearButtons.on('click', clearButtonsClick);
-
-    menuButton.on('click', menuButtonClick);
-
-})($);
+});

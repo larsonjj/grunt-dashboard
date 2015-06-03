@@ -27,7 +27,7 @@ exports.dashboard = {
     // setup here if necessary
     done();
   },
-  default_options: function (test) {
+  defaultOptions: function (test) {
     test.expect(1);
 
     var actual = grunt.file.read('dashboard/generated/dashboard_default.html');
@@ -35,7 +35,7 @@ exports.dashboard = {
 
     test.done();
   },
-  custom_options: function (test) {
+  customOptions: function (test) {
     test.expect(1);
 
     var actual = grunt.file.read('dashboard/generated/dashboard_custom.html');
@@ -43,7 +43,7 @@ exports.dashboard = {
 
     test.done();
   },
-  jade_options: function (test) {
+  jadeOptions: function (test) {
     test.expect(1);
 
     var actual = grunt.file.read('dashboard/generated/dashboard_jade.html');
@@ -51,7 +51,7 @@ exports.dashboard = {
 
     test.done();
   },
-  jade_module: function (test) {
+  jadeModule: function (test) {
     test.expect(1);
 
     var actual = grunt.file.read('dashboard/generated/jade-module.html');
@@ -59,7 +59,7 @@ exports.dashboard = {
 
     test.done();
   },
-  swig_options: function (test) {
+  swigOptions: function (test) {
     test.expect(1);
 
     var actual = grunt.file.read('dashboard/generated/dashboard_swig.html');
@@ -67,7 +67,7 @@ exports.dashboard = {
 
     test.done();
   },
-  swig_module: function (test) {
+  swigModule: function (test) {
     test.expect(1);
 
     var actual = grunt.file.read('dashboard/generated/swig-module.html');
