@@ -65,6 +65,8 @@ module.exports = function(grunt) {
       },
       jade: {
         options: {
+          compiler: require('jade'),
+          compilerOptions: {pretty: true, filename: true},
           dashTemplate: 'dashboard/dashboard-template.hbs',
           moduleTemplate: 'dashboard/module-template.hbs',
           includes: [{

@@ -25,13 +25,14 @@ module.exports = function (grunt) {
     var options = this.options({
       // Allows author to use custom compiler
       // NOTE: needs to have a compile() method or it won't work
-      compiler: require('jade'),
-      compilerOptions: {pretty: true, filename: true},
+      // Known supported compilers:
+      // Jade, Swig
+      compiler: undefined,
+      compilerOptions: {},
       generatedDir: 'dashboard/generated',
-      // searchTerm: 'dash',
       dashTemplate: 'node_modules/grunt-dashboard/dashboard/dashboard-template.hbs',
       moduleTemplate: 'node_modules/grunt-dashboard/dashboard/module-template.hbs',
-      // logo: '',
+      logo: '',
       data: {},
       includes: [{
         cwd: 'node_modules/grunt-dashboard/dashboard/assets/',
@@ -152,9 +153,13 @@ module.exports = function (grunt) {
           if (item.type === 'json') {
             jsonArray.push(item.source);
           }
-          else {
+          // Check to see if compiler exists, otherwise abort
+          else if (options.compiler) {
             // Grab all non-JSON sources within files and compile it to HTML file
             compileToFile(item);
+          }
+          else {
+            grunt.log.error('No Compiler Defined! Aborting.');
           }
 
         });
