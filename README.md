@@ -194,6 +194,8 @@ grunt.initConfig({
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
+<strong>v1.0.1</strong> - Updated Underscore to 1.8.2. Updated Underscore.string to 3.0.3.
+
 <strong>v1.0.0</strong> - Updated Less to 2.5.1. Updated jQuery to 2.1.4. Switched to eslint from jshint. Removed support for IE8. No longer parses source files, uses *.dash files for defining data and module templates. Added compiler and compilerOptions options.
 
 <strong>v0.3.1</strong> - Updated Swig, Jade, and Handlbars to their latest versions.
