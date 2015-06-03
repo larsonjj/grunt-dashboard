@@ -37,11 +37,34 @@ grunt.initConfig({
 
 ### Options
 
-#### options.searchTerm
-Type: `String`
-Default value: `dash`
+#### options.compiler
+Type: `Object`
+Default value: `undefined`
 
-A string value that is used to determine your data search pattern.
+Compiler you would like to use for rendering templates. The compiler you use must have a `render` method in order to work (ex. Jade, Swig, etc)
+
+> NOTE: You will need to install your desired template compiler and require it as the value of the compile key
+
+Example:
+```js
+options: {
+  compiler: require('jade')
+}
+```
+
+#### options.compilerOptions
+Type: `Object`
+Default value: `{}`
+
+Compiler options you would like to pass into your desired compiler.
+
+Example:
+```js
+options: {
+  compiler: require('jade'),
+  compilerOptions: {pretty: true, filename: true}
+}
+```
 
 #### options.generatedDir
 Type: `String`
@@ -73,14 +96,7 @@ Default value: `{}`
 
 An object of custom variables that will be passed to the Handlebars template. Useful if you want to pass things like version information or other custom variables from your Grunt build process.
 
-#### options.debug
-Type: `Boolean`
-Default value: `true`
-
-A boolean value that is used to determine if data comments in your HTML files should be removed.
-This would mostly be used for when you are doing a production build.
-
-#### options.assets
+#### options.includes
 Type: `Array`
 Default value:
 ```
@@ -105,18 +121,16 @@ This would mostly be used for including external stylesheets or scripts you want
 ### Usage Examples
 
 #### Default Options
-In this example, the default options are used to parse JSON data from within an HTML file. So when the task below runs, it will create a `index.html` file within the `dashboard` directory built from all the scanned HTML files within the `html` directory.
+In this example, the default options are used to parse JSON data from within a `*.dash.json`. So when the task below runs, it will create a `index.html` file within the `dashboard` directory built from all the scanned JSON files within the `index` directory.
 
-`html/index.html`:
-```html
-<!--[dash:data]
+`index/index.dash.json`:
+```json
 {
     "status": "development",
     "category": "page",
     "label": "Home",
     "link": "path/to/file/index.html"
 }
-[/dash] -->
 ```
 
 `Gruntfile.js`
@@ -125,49 +139,54 @@ grunt.initConfig({
   dashboard: {
     options: {},
     files: {
-      'dashboard/index.html': ['html/*.html'],
+      'dashboard/index.html': ['index/*.dash.json'],
     },
   },
 })
 ```
 
-#### Custom Options
-In this example, you can see that the `options.searchTerm` property is used to change what pattern to look for. This new pattern i.e. `[custom:data]` will be used to parse for JSON data from within an HTML file. So when the task below runs, it will create a `index.html` file within the `dashboard` directory built from all the scanned HTML files within the `html` directory. Notice the second set of `[custom]` comments: This will also build out an HTML partial file using the markup within the `[custom:html]` comments using the handlebars template specified with `options.htmlTemplate`.
+#### Custom Compiler Options
+In this example, you can see that the `options.compiler` property is used to control which compiler to use for rendering module templates.
+So when the task below runs, it will create a `index.html` file within the `dashboard` directory built from all the scanned Jade files within the `index` directory.
+Notice the `index/index.dash.jade` example: This will build out an HTML partial file using the markup within that file using the jade compiler.
+It's compiled source will then be rendered out to the handlebars template specified with `options.moduleTemplate`.
 
-`html/index.html`:
-```html
-<!--[custom:data]
+`index/index.dash.json`:
+```json
 {
     "status": "development",
     "category": "page",
     "label": "Home",
     "link": "path/to/file/index.html"
 }
-[/custom] -->
-<!--[custom:html]
-<div>
-    <h1>Testing</h1>
-    <p>
-        This is just a simple test
-    <p>
-</div>
-[/custom] -->
+```
+
+`index/index.dash.jade`
+```jade
+div
+  h1 Testing
+    p
+      This is just a simple test
 ```
 
 `Gruntfile.js`
 ```js
 grunt.initConfig({
-  dashboard: {
-    options: {
-      searchTerm: 'custom',
-      dashTemplate: 'dashboard/dashboard-template.hbs',
-      htmlTemplate: 'dashboard/module-template.hbs',
-      generatedDir: 'dashboard/generated'
-    },
-    files: {
-      'dashboard/index.html': ['html/*.html']
-    },
+  options: {
+    compiler: require('jade'),
+    compilerOptions: {pretty: true, filename: true},
+    dashTemplate: 'dashboard/dashboard-template.hbs',
+    moduleTemplate: 'dashboard/module-template.hbs',
+    includes: [{
+      cwd: 'dashboard/assets/',
+      src: [
+        '**/*'
+      ]
+    }]
   },
+  files: {
+    'dashboard/index.html': ['index/*.dash.{json,jade}'],
+  }
 })
 ```
 
@@ -175,7 +194,7 @@ grunt.initConfig({
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
-<strong>v1.0.0</strong> - Updated Less to 2.5.1. Updated jQuery to 2.1.4. Switched to eslint from jshint. Removed support for IE8.
+<strong>v1.0.0</strong> - Updated Less to 2.5.1. Updated jQuery to 2.1.4. Switched to eslint from jshint. Removed support for IE8. No longer parses source files, uses *.dash files for defining data and module templates. Added compiler and compilerOptions options.
 
 <strong>v0.3.1</strong> - Updated Swig, Jade, and Handlbars to their latest versions.
 
@@ -224,4 +243,4 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 <strong>v0.0.1</strong> - Initial alpha release
 
 ## License
-Copyright (c) 2014 Jake Larson. Licensed under the MIT license.
+Copyright (c) 2014-2015 Jake Larson. Licensed under the MIT license.

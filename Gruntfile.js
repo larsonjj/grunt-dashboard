@@ -14,15 +14,14 @@ module.exports = function(grunt) {
 
   // Project configuration.
   grunt.initConfig({
-    jshint: {
+    eslint: {
       all: [
         'Gruntfile.js',
         'tasks/*.js',
         '<%= nodeunit.tests %>'
       ],
       options: {
-        jshintrc: '.jshintrc',
-        reporter: require('jshint-stylish')
+        configFile: '.eslintrc'
       }
     },
 
@@ -33,11 +32,11 @@ module.exports = function(grunt) {
 
     // Configuration to be run (and then tested).
     dashboard: {
-      default_options: {
+      defaultOptions: {
         options: {
           dashTemplate: 'dashboard/dashboard-template.hbs',
-          htmlTemplate: 'dashboard/html-template.hbs',
-          assets: [{
+          moduleTemplate: 'dashboard/module-template.hbs',
+          includes: [{
             cwd: 'dashboard/assets/',
             src: [
               '**/*'
@@ -45,15 +44,15 @@ module.exports = function(grunt) {
           }]
         },
         files: {
-          'dashboard/generated/dashboard_default.html': ['test/fixtures/default/*.html']
+          'dashboard/generated/dashboard_default.html': ['test/fixtures/default/*.dash.json']
         }
       },
-      custom_options: {
+      customOptions: {
         options: {
           searchTerm: 'custom',
           dashTemplate: 'dashboard/dashboard-template.hbs',
-          htmlTemplate: 'dashboard/html-template.hbs',
-          assets: [{
+          moduleTemplate: 'dashboard/module-template.hbs',
+          includes: [{
             cwd: 'dashboard/assets/',
             src: [
               '**/*'
@@ -61,14 +60,16 @@ module.exports = function(grunt) {
           }]
         },
         files: {
-          'dashboard/generated/dashboard_custom.html': ['test/fixtures/custom/*.html']
+          'dashboard/generated/dashboard_custom.html': ['test/fixtures/custom/*.dash.json']
         }
       },
       jade: {
         options: {
+          compiler: require('jade'),
+          compilerOptions: {pretty: true, filename: true},
           dashTemplate: 'dashboard/dashboard-template.hbs',
-          htmlTemplate: 'dashboard/html-template.hbs',
-          assets: [{
+          moduleTemplate: 'dashboard/module-template.hbs',
+          includes: [{
             cwd: 'dashboard/assets/',
             src: [
               '**/*'
@@ -76,14 +77,16 @@ module.exports = function(grunt) {
           }]
         },
         files: {
-          'dashboard/generated/dashboard_jade.html': ['test/fixtures/jade/*.jade']
+          'dashboard/generated/dashboard_jade.html': ['test/fixtures/jade/**/*.dash.{jade,json}']
         }
       },
       swig: {
         options: {
+          compiler: require('swig'),
+          compilerOptions: {filename: true},
           dashTemplate: 'dashboard/dashboard-template.hbs',
-          htmlTemplate: 'dashboard/html-template.hbs',
-          assets: [{
+          moduleTemplate: 'dashboard/module-template.hbs',
+          includes: [{
             cwd: 'dashboard/assets/',
             src: [
               '**/*'
@@ -91,7 +94,7 @@ module.exports = function(grunt) {
           }]
         },
         files: {
-          'dashboard/generated/dashboard_swig.html': ['test/fixtures/swig/*.swig']
+          'dashboard/generated/dashboard_swig.html': ['test/fixtures/swig/**/*.dash.{swig,json}']
         }
       }
     },
@@ -111,6 +114,6 @@ module.exports = function(grunt) {
   grunt.registerTask('test', ['clean', 'dashboard', 'nodeunit']);
 
   // By default, lint and run all tests.
-  grunt.registerTask('default', ['jshint', 'test']);
+  grunt.registerTask('default', ['eslint', 'test']);
 
 };
