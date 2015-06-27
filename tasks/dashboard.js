@@ -183,7 +183,7 @@ module.exports = function (grunt) {
             };
           });
 
-          // Grab all categories
+          // Grab all statuses
           var statuses = _.pluck(handlebarsOptions.generated, 'status');
           statuses = _.uniq(statuses);
           statuses = statuses.map(function(val) {
